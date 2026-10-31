@@ -14,6 +14,17 @@ const sensorSettingsList = document.getElementById("sensorSettingsList");
 
 const SENSOR_STORAGE_KEY = "pulsewatch_hidden_sensors_v1";
 const HARDWARE_LAYOUT_KEY = "pulsewatch_hardware_card_layout_v1";
+const HARDWARE_VIEW_KEY = "rigobserver_hardware_view_v1";
+const hardwareOverviewButton = document.getElementById("pwHardwareOverview");
+const hardwareAllButton = document.getElementById("pwHardwareAllSensors");
+const hardwareDetailActions = document.getElementById("pwHardwareDetailActions");
+const hardwareExpandAll = document.getElementById("pwHardwareExpandAll");
+const hardwareCollapseAll = document.getElementById("pwHardwareCollapseAll");
+let hardwareViewMode = "overview";
+try {
+    hardwareViewMode = localStorage.getItem(HARDWARE_VIEW_KEY) === "all" ? "all" : "overview";
+} catch(error) { console.warn("Hardware view preference unavailable:",error); }
+const expandedHardwareDevices = new Set();
 const hardwareLayoutDialog = document.getElementById("pwHardwareLayoutDialog");
 const hardwareLayoutList = document.getElementById("pwHardwareLayoutList");
 const DEFAULT_CATEGORY_ORDER = ["Cpu","Gpu","Memory","Storage","Motherboard","SuperIO"];
@@ -29,6 +40,33 @@ let hardwareLayoutSignature = null;
 const hardwareSensorNodes = new Map();
 const hardwareSummaryNodes = new Map();
 
+// Keep detailed readings accessible without overwhelming the first view.
+// Existing sensor visibility and device ordering are independent of this mode.
+function setHardwareView(mode) {
+    hardwareViewMode=mode==="all"?"all":"overview";
+    hardwareContainer.classList.toggle("pw-hardware-overview",hardwareViewMode==="overview");
+    hardwareContainer.classList.toggle("pw-hardware-all-sensors",hardwareViewMode==="all");
+    for(const [button,value] of [
+        [hardwareOverviewButton,"overview"],[hardwareAllButton,"all"]
+    ]) {
+        if(!button)continue;
+        const selected=hardwareViewMode===value;
+        button.classList.toggle("active",selected);
+        button.setAttribute("aria-pressed",String(selected));
+    }
+    if(hardwareDetailActions)hardwareDetailActions.hidden=hardwareViewMode!=="all";
+    try{localStorage.setItem(HARDWARE_VIEW_KEY,hardwareViewMode);}
+    catch(error){console.warn("Could not save hardware view:",error);}
+}
+hardwareOverviewButton?.addEventListener("click",()=>setHardwareView("overview"));
+hardwareAllButton?.addEventListener("click",()=>setHardwareView("all"));
+hardwareExpandAll?.addEventListener("click",()=>{
+    hardwareContainer.querySelectorAll(".hardware-reading-group").forEach(group=>group.open=true);
+});
+hardwareCollapseAll?.addEventListener("click",()=>{
+    hardwareContainer.querySelectorAll(".hardware-reading-group").forEach(group=>group.open=false);
+});
+setHardwareView(hardwareViewMode);
 
 // ==========================================
 // SENSOR CONFIGURATION
@@ -464,7 +502,28 @@ function createHardwareCard(device, sensors) {
     const highlights = createHardwareHighlights(device, sensors);
 
     if (highlights) {
+        card.classList.add("pw-hardware-has-highlights");
         card.appendChild(highlights);
+    }
+    const key=deviceKey(device);
+    if(expandedHardwareDevices.has(key))card.classList.add("pw-hardware-detail-open");
+    if(sensors.length && highlights) {
+        const detailsButton=document.createElement("button");
+        detailsButton.type="button";
+        detailsButton.className="pw-hardware-detail-toggle";
+        const sync=()=>{
+            const expanded=card.classList.contains("pw-hardware-detail-open");
+            detailsButton.textContent=expanded?"Hide details":"View details";
+            detailsButton.setAttribute("aria-expanded",String(expanded));
+        };
+        detailsButton.addEventListener("click",()=>{
+            const expanded=card.classList.toggle("pw-hardware-detail-open");
+            if(expanded)expandedHardwareDevices.add(key);
+            else expandedHardwareDevices.delete(key);
+            sync();
+        });
+        sync();
+        header.append(detailsButton);
     }
 
     if (sensors.length === 0) {
