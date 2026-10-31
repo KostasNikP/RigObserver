@@ -673,11 +673,14 @@ function renderHardwareDashboard() {
             const rowValue = hardwareSensorNodes.get(key);
             const summaryValue = hardwareSummaryNodes.get(key);
 
-            if (rowValue) {
+            // Hundreds of sensors may be polled every few seconds.
+            // Avoid unnecessary text-node mutations for unchanged readings;
+            // this also keeps expanded sensor groups stable while monitoring.
+            if (rowValue && rowValue.textContent !== formatted) {
                 rowValue.textContent = formatted;
             }
 
-            if (summaryValue) {
+            if (summaryValue && summaryValue.textContent !== formatted) {
                 summaryValue.textContent = formatted;
             }
         }
