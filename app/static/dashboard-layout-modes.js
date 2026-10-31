@@ -47,12 +47,13 @@ const toolbar = document.createElement("div");
 toolbar.className = "pw-parent-layout-toolbar";
 toolbar.innerHTML =
     '<div class="pw-parent-layout-heading">' +
-      '<span>Card layout</span>' +
-      '<span id="pwParentLayoutHint">Smart: cards automatically fill available gaps.</span>' +
+      '<span>Dashboard layout</span>' +
+      '<span id="pwParentLayoutHint">Choose how to arrange your monitoring cards.</span>' +
     '</div>' +
     '<div class="pw-parent-layout-buttons" role="group" aria-label="Dashboard card layout">' +
       '<button type="button" data-pw-parent-layout-mode="smart">Smart</button>' +
       '<button type="button" data-pw-parent-layout-mode="free">Free</button>' +
+      '<button type="button" id="pwRecommendedLayout" class="pw-recommended-button" title="Apply essential monitoring metrics and a ready-made dashboard">Recommended</button>' +
       '<button type="button" id="pwResetFreePositions" title="Restore the free-placement positions">Reset positions</button>' +
     '</div>';
 dashboard.before(toolbar);
@@ -244,6 +245,7 @@ for (const button of modeButtons) {
     button.addEventListener("click",()=>switchMode(button.dataset.pwParentLayoutMode));
 }
 reset.addEventListener("click",resetPositions);
+window.addEventListener("pw-apply-recommended-layout",()=>switchMode("smart"));
 
 // Free dragging uses the same handles as the already-tested order drag.
 // The order handler ignores those handles while Free mode is active.
