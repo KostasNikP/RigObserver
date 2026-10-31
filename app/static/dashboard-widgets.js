@@ -813,6 +813,7 @@ function updateCard(card,item,time) {
 // helper and psutil endpoints have different update schedules.
 function applyCatalog(timestamp) {
     let modified=false;
+    let completedRecommended=false;
     const signatures=[];
     for(const group of GROUPS) {
         const merged=new Map([
@@ -831,6 +832,8 @@ function applyCatalog(timestamp) {
             // If a partial hardware inventory arrives before psutil metrics,
             // retry the Recommended selection on the next sensor update.
             if(picks.length || !state.recommendedPending[group]) {
+                if(state.recommendedPending[group] && picks.length)
+                    completedRecommended=true;
                 state.selected[group]=picks;
                 state.recommendedPending[group]=false;
                 modified=true;
@@ -844,6 +847,13 @@ function applyCatalog(timestamp) {
         signatures.push([...merged.keys()].join("|"));
     }
     if(modified)save();
+    // If the Recommended preset was applied before sensor discovery
+    // finished, fit the newly populated widget rows only once they exist.
+    if(completedRecommended) {
+        requestAnimationFrame(()=>requestAnimationFrame(()=>{
+            window.dispatchEvent(new Event("pw-fit-recommended-cards"));
+        }));
+    }
     // The overview display modes draw their own compact primary
     // readout, chart or gauge using the same live sensor catalog.
     try { window.PulseWatchExtraModes?.update(catalog); }
