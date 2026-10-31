@@ -10,7 +10,8 @@ try{collapsed=localStorage.getItem(KEY)==="true";}
 catch(error){console.warn("Sidebar state unavailable:",error);}
 function update(){
     root.classList.toggle("pw-sidebar-collapsed",collapsed);
-    toggle.textContent=collapsed?"›":"‹";
+    // Keep the vector button in place while reflecting the saved state.
+    toggle.dataset.collapsed=String(collapsed);
     toggle.setAttribute("aria-label",collapsed?"Expand sidebar":"Collapse sidebar");
     toggle.title=collapsed?"Expand sidebar":"Collapse sidebar";
     toggle.setAttribute("aria-expanded",String(!collapsed));
