@@ -221,7 +221,10 @@
     border-radius:9px;
     background:#1b2b3d;
     color:#e3f2ff;
-    font:600 12px/1.4 inherit;
+    font-family:inherit;
+    font-size:12px;
+    font-weight:600;
+    line-height:1.4;
     cursor:pointer;
 }
 .pw-preset-actions button:hover {border-color:#77c9f0;}
