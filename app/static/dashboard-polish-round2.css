@@ -1,0 +1,202 @@
+/* RigObserver — Polish Round 2: unified overview cards.
+   Pure presentation layer. Does not change card geometry, sensor selections,
+   Smart/Free placement, resize handlers, or Recommended preset sizing. */
+
+.overview-section .dashboard > .pw3-cpu-card {
+    --pw-card-accent:#ff9e45;
+}
+.overview-section .dashboard > .pw3-gpu-card {
+    --pw-card-accent:#39cfff;
+}
+.overview-section .dashboard > .pw-extra-card {
+    --pw-card-accent:var(--pw-extra-accent,#8bc6ef);
+}
+
+/* Restrained elevated finish; no shifting or scaling during hover. */
+.overview-section .dashboard > :is(.pw3-cpu-card,.pw3-gpu-card,.pw-extra-card) {
+    border-radius:15px;
+    box-shadow:inset 0 1px 0 rgba(218,237,255,.045),
+        0 9px 24px rgba(0,0,0,.12);
+    transition:border-color .18s ease,box-shadow .18s ease;
+}
+.overview-section .dashboard > :is(.pw3-cpu-card,.pw3-gpu-card,.pw-extra-card):hover {
+    box-shadow:inset 0 1px 0 rgba(225,243,255,.07),
+        0 12px 29px rgba(0,0,0,.19);
+}
+.overview-section .dashboard > :is(.pw3-cpu-card,.pw3-gpu-card,.pw-extra-card).pw-parent-is-resizing,
+.overview-section .dashboard > :is(.pw3-cpu-card,.pw3-gpu-card,.pw-extra-card).pw-free-card-moving {
+    transition:none;
+}
+
+/* Harmonized heading rhythm while keeping the original responsive wrap. */
+.overview-section .dashboard > :is(.pw3-cpu-card,.pw3-gpu-card,.pw-extra-card)
+:is(.pw3-cpu-header,.pw3-gpu-header,.pw-extra-header) {
+    align-items:center;
+    column-gap:14px;
+    row-gap:10px;
+    margin-bottom:14px;
+}
+.overview-section .dashboard :is(.pw3-cpu-title,.pw-extra-heading,.pw3-gpu-header > div:first-child) {
+    min-width:0;
+    flex:0 1 auto;
+}
+.overview-section .dashboard :is(.pw3-cpu-category,.pw3-gpu-category,.pw-extra-eyebrow) {
+    display:flex;
+    align-items:center;
+    gap:8px;
+    margin-bottom:7px;
+    color:var(--pw-card-accent);
+    font-size:10px;
+    font-weight:750;
+    letter-spacing:1.3px;
+    line-height:1.3;
+    text-transform:uppercase;
+}
+.overview-section .dashboard :is(.pw3-cpu-category,.pw3-gpu-category,.pw-extra-eyebrow)::before {
+    content:"";
+    display:block;
+    width:5px;
+    height:5px;
+    flex:0 0 5px;
+    border-radius:2px;
+    background:var(--pw-card-accent);
+    box-shadow:0 0 9px color-mix(in srgb,var(--pw-card-accent) 35%,transparent);
+}
+.overview-section .dashboard :is(.pw3-cpu-title,.pw-extra-heading,.pw3-gpu-header > div:first-child) > h3 {
+    display:inline-block;
+    vertical-align:middle;
+    color:#f4f9ff;
+    font-size:21px;
+    font-weight:760;
+    letter-spacing:-.65px;
+    line-height:1.25;
+    margin:0;
+    text-wrap:balance;
+}
+.overview-section .dashboard .pw3-gpu-header #overviewGpuName {
+    max-width:100%;
+    overflow:hidden;
+    text-overflow:ellipsis;
+    white-space:nowrap;
+    margin-top:7px;
+    font-size:11.5px;
+    line-height:1.45;
+    color:#9db7cb;
+}
+
+/* Drag handles sit next to the actual title, not the category label. */
+.overview-section .dashboard .pw-card-drag-handle {
+    box-sizing:border-box;
+    width:30px;
+    height:30px;
+    margin-left:9px;
+    border-radius:9px;
+    border-color:#344b60;
+    background:linear-gradient(145deg,#1c3042,#142335);
+    color:#a5bacb;
+    font-size:19px;
+    font-weight:500;
+    box-shadow:inset 0 1px 0 rgba(255,255,255,.05);
+    transition:background .16s ease,border-color .16s ease,color .16s ease;
+}
+.overview-section .dashboard .pw-card-drag-handle:hover,
+.overview-section .dashboard .pw-card-drag-handle:focus-visible {
+    border-color:var(--pw-card-accent);
+    color:#f4faff;
+    background:#223e53;
+}
+.overview-section .dashboard .pw-card-drag-handle:focus-visible {
+    outline:2px solid var(--pw-card-accent);
+    outline-offset:2px;
+}
+
+/* Present the segmented selector as one control; colored active view stays. */
+.overview-section .dashboard .pw3-view-switch {
+    border:1px solid #32475a;
+    background:#0c1723;
+    box-shadow:inset 0 1px 0 rgba(255,255,255,.035);
+}
+.overview-section .dashboard .pw3-view-switch > button:not(.active) {
+    color:#a9bed0;
+}
+.overview-section .dashboard .pw3-view-switch > button.active {
+    box-shadow:0 1px 7px rgba(0,0,0,.18);
+}
+.overview-section .dashboard .pw-overview-options > summary {
+    background:linear-gradient(145deg,#1b3144,#142537);
+    color:#d5e9f8;
+    border-color:#35536a;
+    font-size:23px;
+    letter-spacing:.25px;
+    box-shadow:inset 0 1px 0 rgba(255,255,255,.05);
+    transition:background .15s ease,border-color .15s ease;
+}
+.overview-section .dashboard .pw-overview-options > summary:hover,
+.overview-section .dashboard .pw-overview-options[open] > summary {
+    background:#254357;
+    border-color:var(--pw-card-accent);
+    color:#f5fbff;
+}
+.overview-section .dashboard .pw-overview-options > summary:focus-visible {
+    outline:2px solid var(--pw-card-accent);
+    outline-offset:2px;
+}
+
+/* The contextual menu is easier to scan without growing the page itself. */
+.overview-section .dashboard .pw-overview-popup {
+    width:226px;
+    padding:13px;
+    border:1px solid #38536b;
+    border-radius:13px;
+    background:linear-gradient(160deg,#142436,#0e1a29);
+    box-shadow:0 15px 45px rgba(0,0,0,.48),
+        inset 0 1px 0 rgba(255,255,255,.06);
+}
+.overview-section .dashboard .pw-options-title {
+    margin-bottom:10px;
+    padding-bottom:9px;
+    border-bottom:1px solid #2b4153;
+    color:#d9eaf7;
+    font-size:11px;
+    font-weight:750;
+    line-height:1.3;
+    letter-spacing:.5px;
+}
+.overview-section .dashboard .pw-overview-options .pw-mini-layout-controls {
+    gap:7px;
+}
+.overview-section .dashboard .pw-overview-options .pw-mini-layout-controls button {
+    min-height:37px;
+    border-radius:8px;
+    padding:8px 11px;
+    font-size:12px;
+    line-height:1.4;
+    transition:background .15s ease,border-color .15s ease;
+}
+.overview-section .dashboard .pw-overview-options .pw-mini-layout-controls button:not(.active):hover {
+    border-color:#6aa6c7;
+    background:#20384b;
+}
+.overview-section .dashboard .pw-overview-options .pw-mini-layout-controls button:focus-visible {
+    outline:2px solid var(--pw-card-accent);
+    outline-offset:2px;
+}
+
+/* Keep GPU device description from overflowing a narrow card. */
+@media(max-width:700px) {
+    .overview-section .dashboard > :is(.pw3-cpu-card,.pw3-gpu-card,.pw-extra-card)
+    :is(.pw3-cpu-header,.pw3-gpu-header,.pw-extra-header) {
+        align-items:flex-start;
+    }
+    .overview-section .dashboard :is(.pw3-cpu-title,.pw-extra-heading,.pw3-gpu-header > div:first-child) > h3 {
+        font-size:19px;
+    }
+}
+@media(prefers-reduced-motion:reduce) {
+    .overview-section .dashboard > :is(.pw3-cpu-card,.pw3-gpu-card,.pw-extra-card),
+    .overview-section .dashboard .pw-card-drag-handle,
+    .overview-section .dashboard .pw-overview-options > summary,
+    .overview-section .dashboard .pw-overview-options .pw-mini-layout-controls button {
+        transition:none;
+    }
+}
