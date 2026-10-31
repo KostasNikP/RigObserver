@@ -19,6 +19,7 @@ if(![root,toggle,badge,panel,summary,list,close,toast,toastTitle,
     toastMessage,toastView,toastClose].every(Boolean))return;
 
 let priorKeys=new Set();
+let hasReceivedAlerts=false;
 let toastTimeout=null;
 let latestAlerts=null;
 let lastListSignature=null;
@@ -126,6 +127,11 @@ function update(alerts) {
     const newKeys=new Set(alerts.map(alertKey));
     const additions=alerts.filter(alert=>!priorKeys.has(alertKey(alert)));
     priorKeys=newKeys;
+    // Native notifications are only sent for newly triggered alerts, not
+    // pre-existing warnings reloaded when the desktop app starts.
+    if(hasReceivedAlerts && additions.length)
+        window.RigObserverNativeNotifications?.notify(additions);
+    hasReceivedAlerts=true;
     if(additions.length)notifyNewAlert(additions);
     if(!count)dismissToast();
 }
