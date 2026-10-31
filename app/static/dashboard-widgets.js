@@ -400,6 +400,10 @@ function createCard(item) {
             node.classList.add("pw-mini-manual-width");
             node.style.width=Math.round(clamp(resizing.w+dx,
                 MIN_W,Math.max(MIN_W,parentWidth-usedX-2)))+"px";
+            // Expand to a new Auto grid span while dragging wider; the
+            // saved width, position and Free mode are never rewritten.
+            if (!isFree(item.group))
+                window.dispatchEvent(new Event("pw-mini-widget-resizing"));
         }
         if (Math.abs(dy)>=2) {
             node.style.height=Math.round(clamp(resizing.h+dy,
