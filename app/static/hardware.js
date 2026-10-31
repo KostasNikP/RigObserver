@@ -479,6 +479,7 @@ function createHardwareHighlights(device, sensors) {
 function createHardwareCard(device, sensors) {
     const card = document.createElement("article");
     card.className = "hardware-device-card";
+    card.dataset.category = device.category || "Other";
 
     const header = document.createElement("div");
     header.className = "hardware-device-header";
