@@ -1,0 +1,543 @@
+/* RigObserver | System sections polish.
+   Hardware: progressive detail, all sensor data preserved.
+   Alerts: concise states and threshold settings.
+   No changes to hardware discovery, APIs, data fetching or dashboard layouts. */
+
+/* Consistent section rhythm without repetitive captions. */
+.hardware-section > .section-heading,
+.alerts-section > .section-heading,
+.settings-section > .section-heading {
+    gap:12px 18px;
+    margin-bottom:15px;
+}
+.hardware-section > .section-heading h2,
+.alerts-section > .section-heading h2,
+.settings-section > .section-heading h2 {
+    color:#eff8ff;
+    font-size:19px;
+    font-weight:760;
+    letter-spacing:-.5px;
+}
+
+/* Hardware toolbar: clear overview/detail choice first, editing secondary. */
+.hardware-section .hardware-actions {
+    display:flex;
+    align-items:center;
+    justify-content:flex-end;
+    flex-wrap:wrap;
+    gap:8px;
+}
+.pw-hardware-view-switch {
+    box-sizing:border-box;
+    display:inline-flex;
+    gap:3px;
+    padding:3px;
+    border:1px solid #314f65;
+    border-radius:11px;
+    background:#0f1c2a;
+}
+.pw-hardware-view-switch button {
+    box-sizing:border-box;
+    min-height:34px;
+    padding:7px 12px;
+    border:1px solid transparent;
+    border-radius:8px;
+    background:transparent;
+    color:#a9c2d5;
+    font:650 12px/1.35 "Segoe UI",sans-serif;
+    cursor:pointer;
+    transition:background .16s ease,color .16s ease,border-color .16s ease;
+}
+.pw-hardware-view-switch button.active {
+    color:#effaff;
+    border-color:#3c8fb6;
+    background:linear-gradient(145deg,#1d5575,#183e5a);
+    box-shadow:inset 0 1px 0 rgba(255,255,255,.07);
+}
+.pw-hardware-view-switch button:hover:not(.active) {
+    background:#1d3549;
+    color:#eaf8ff;
+}
+.hardware-section .hardware-customize-button {
+    box-sizing:border-box;
+    min-height:40px;
+    padding:9px 13px;
+    border:1px solid #385670;
+    border-radius:10px;
+    background:linear-gradient(145deg,#1b3044,#142539);
+    color:#e0f0fc;
+    font-family:inherit;
+    font-size:12px;
+    font-weight:660;
+    transition:border-color .15s ease,background .15s ease;
+}
+.hardware-section .hardware-customize-button:hover {
+    border-color:#63c6ee;
+    background:#244258;
+}
+.hardware-section .live-indicator {
+    box-sizing:border-box;
+    min-height:38px;
+    display:inline-flex;
+    align-items:center;
+    padding:8px 12px;
+    border-radius:999px;
+    font-size:10px;
+    letter-spacing:.7px;
+    white-space:nowrap;
+}
+.hardware-section :is(button,.pw-hardware-detail-toggle):focus-visible,
+.settings-section :is(input,button):focus-visible {
+    outline:2px solid #74d5fb;
+    outline-offset:2px;
+}
+
+/* Sensor group actions are available only in All Sensors mode. */
+.pw-hardware-detail-actions {
+    box-sizing:border-box;
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    flex-wrap:wrap;
+    gap:9px;
+    margin:0 0 12px;
+    padding:9px 13px;
+    border:1px solid #293f50;
+    border-radius:10px;
+    background:#101c2a;
+}
+.pw-hardware-detail-actions[hidden]{display:none!important;}
+.pw-hardware-detail-actions > span {
+    font-size:11px;
+    font-weight:650;
+    color:#96afc2;
+}
+.pw-hardware-detail-actions > div {display:flex;flex-wrap:wrap;gap:7px;}
+.pw-hardware-detail-actions button {
+    min-height:30px;
+    padding:5px 11px;
+    border:1px solid #335069;
+    border-radius:7px;
+    background:#182b3d;
+    color:#d3e6f5;
+    font:600 11px/1.35 "Segoe UI",sans-serif;
+    cursor:pointer;
+}
+.pw-hardware-detail-actions button:hover {
+    border-color:#64b9de;
+    background:#25455c;
+}
+
+/* Compact, consistently sized overview cards, with space for larger cards
+   when users deliberately request full sensor detail. */
+.hardware-container.pw-hardware-overview .hardware-grid {
+    display:block;
+    columns:3;
+    column-gap:14px;
+}
+.hardware-container.pw-hardware-overview .hardware-grid > .hardware-device-card {
+    display:inline-block;
+    vertical-align:top;
+    width:100%;
+    margin:0 0 14px;
+    break-inside:avoid;
+}
+.hardware-section .hardware-device-card {
+    --pw-device-accent:#58c9ef;
+    background:linear-gradient(150deg,#142436,#0c1725 90%);
+    border:1px solid #30495e;
+    border-radius:14px;
+    box-shadow:inset 0 1px 0 rgba(224,246,255,.045);
+}
+.hardware-section .hardware-device-card[data-category="Cpu"] {--pw-device-accent:#ffab5e;}
+.hardware-section .hardware-device-card[data-category^="Gpu"] {--pw-device-accent:#42cdf5;}
+.hardware-section .hardware-device-card[data-category="Memory"] {--pw-device-accent:#45d6aa;}
+.hardware-section .hardware-device-card[data-category="Storage"] {--pw-device-accent:#f4bf58;}
+.hardware-section .hardware-device-card[data-category="Motherboard"],
+.hardware-section .hardware-device-card[data-category="SuperIO"] {--pw-device-accent:#e79bce;}
+.hardware-section .hardware-device-card:hover {
+    border-color:color-mix(in srgb,var(--pw-device-accent) 46%,#30495e);
+    box-shadow:inset 0 1px 0 rgba(224,246,255,.055),
+        0 9px 24px rgba(0,0,0,.16);
+}
+.hardware-section .hardware-device-header {
+    display:grid;
+    grid-template-columns:minmax(0,1fr) auto;
+    align-items:center;
+    gap:5px 10px;
+    padding:15px 16px 13px;
+    border-bottom:1px solid #293f52;
+}
+.hardware-section .hardware-device-category {
+    grid-column:1;
+    color:var(--pw-device-accent);
+    font-size:10px;
+    font-weight:760;
+    line-height:1.3;
+    letter-spacing:1.25px;
+}
+.hardware-section .hardware-device-name {
+    grid-column:1;
+    color:#eef7ff;
+    font-size:15px;
+    font-weight:730;
+    line-height:1.38;
+    letter-spacing:-.3px;
+}
+.hardware-section .hardware-device-count {
+    grid-column:1;
+    color:#8faabc;
+    font-size:11px;
+    line-height:1.3;
+}
+.hardware-section .pw-hardware-detail-toggle {
+    grid-column:2;
+    grid-row:1 / span 3;
+    align-self:center;
+    min-height:32px;
+    max-width:105px;
+    padding:6px 10px;
+    border:1px solid #345875;
+    border-radius:8px;
+    background:#1a3044;
+    color:#c8e6f7;
+    font-size:11px;
+    font-weight:660;
+    white-space:nowrap;
+    cursor:pointer;
+}
+.hardware-section .pw-hardware-detail-toggle:hover {
+    border-color:var(--pw-device-accent);
+    background:#24435b;
+}
+.hardware-section .hardware-highlights {
+    display:grid;
+    grid-template-columns:repeat(auto-fit,minmax(min(100%,120px),1fr));
+    gap:8px;
+    padding:12px 13px 13px;
+    border-bottom:0;
+}
+.hardware-section .hardware-highlight {
+    gap:5px;
+    min-width:0;
+    padding:12px;
+    border:1px solid #2a4559;
+    border-radius:9px;
+    background:linear-gradient(145deg,#0c1928,#101e2d);
+    box-shadow:inset 0 1px 0 rgba(234,248,255,.035);
+}
+.hardware-section .hardware-highlight-label {
+    color:#98b4c7;
+    font-size:11px;
+    line-height:1.3;
+}
+.hardware-section .hardware-highlight-value {
+    color:#f0f8ff;
+    font-size:clamp(16px,1.5vw,20px);
+    line-height:1.2;
+    font-variant-numeric:tabular-nums;
+}
+
+/* Hide detailed groups ONLY when key metrics are already shown and the
+   device isn't expanded. Devices without highlights keep their details. */
+.hardware-container.pw-hardware-overview
+.hardware-device-card.pw-hardware-has-highlights:not(.pw-hardware-detail-open)
+.hardware-device-groups {
+    display:none;
+}
+.hardware-container.pw-hardware-all-sensors .pw-hardware-detail-toggle {
+    display:none;
+}
+.hardware-section .hardware-device-groups {
+    padding:9px 12px 12px;
+    border-top:1px solid #263e51;
+}
+.hardware-section .hardware-reading-group {
+    margin-bottom:7px;
+    border:1px solid #2e4559;
+    border-radius:9px;
+    background:#0f1d2b;
+}
+.hardware-section .hardware-group-heading {
+    padding:10px 11px;
+    background:#17293b;
+    color:#d5e7f4;
+    font-size:12px;
+}
+.hardware-section .hardware-reading-group[open] .hardware-group-heading {
+    color:var(--pw-device-accent);
+    background:#1c3042;
+}
+.hardware-section .hardware-group-count {
+    color:#a1b8c9;
+}
+.hardware-section .hardware-reading {
+    gap:12px;
+    padding:9px 2px;
+    border-color:#263b4c;
+}
+.hardware-section .hardware-reading-name {
+    color:#b3c9da;
+}
+.hardware-section .hardware-reading-value {
+    color:#f0f8ff;
+    font-variant-numeric:tabular-nums;
+}
+.hardware-section .hardware-readings {
+    scrollbar-color:#3b607c transparent;
+    overscroll-behavior-y:auto;
+}
+
+/* Alerts: distinct healthy and warning treatments, no loud banner. */
+.alerts-section .alerts-badge {
+    display:inline-flex;
+    align-items:center;
+    gap:8px;
+    padding:8px 12px;
+    border:1px solid #30546b;
+    border-radius:999px;
+    background:#132536;
+    color:#a9c9dc;
+    font-size:11px;
+    font-weight:680;
+    white-space:nowrap;
+}
+.alerts-section .alerts-badge::before {
+    content:"";
+    width:7px;
+    height:7px;
+    border-radius:50%;
+    background:#94abc0;
+}
+.alerts-section .alerts-badge[data-state="healthy"] {
+    border-color:#2b675e;
+    background:#102b2b;
+    color:#82ddbd;
+}
+.alerts-section .alerts-badge[data-state="healthy"]::before {
+    background:#42d9a2;
+}
+.alerts-section .alerts-badge[data-state="warning"] {
+    border-color:#866536;
+    background:#2b2418;
+    color:#ffd38b;
+}
+.alerts-section .alerts-badge[data-state="warning"]::before {
+    background:#ffbd5c;
+}
+.alerts-section #alerts-container {display:grid;gap:10px;}
+.alerts-section :is(.alerts-ok,.alert-item) {
+    box-sizing:border-box;
+    display:flex;
+    align-items:center;
+    gap:15px;
+    min-height:88px;
+    padding:17px 20px;
+    border-radius:13px;
+    background:linear-gradient(145deg,#142634,#0e1b27);
+    box-shadow:inset 0 1px 0 rgba(255,255,255,.04);
+}
+.alerts-section .alerts-ok {
+    border:1px solid #2a5b55;
+    border-left:3px solid #42cc9d;
+    color:#e4f6f2;
+}
+.alerts-section .alert-item {
+    border:1px solid #785b35;
+    border-left:3px solid #f3b554;
+    background:linear-gradient(145deg,#2b241c,#171c22);
+    color:#fff3df;
+}
+.alerts-section .alert-item.pw-alert-critical {
+    border-color:#9c4b50;
+    border-left-color:#fb707d;
+    background:linear-gradient(145deg,#321e27,#1b1a25);
+}
+.alerts-section .pw-alert-icon {
+    display:grid;
+    place-items:center;
+    box-sizing:border-box;
+    flex:0 0 38px;
+    width:38px;
+    height:38px;
+    border:1px solid #3c8b78;
+    border-radius:11px;
+    background:#173c36;
+    color:#78ebc0;
+    font-size:20px;
+    font-weight:750;
+}
+.alerts-section .alert-item .pw-alert-icon {
+    border-color:#8b6935;
+    background:#49341c;
+    color:#ffc870;
+}
+.alerts-section .alert-item.pw-alert-critical .pw-alert-icon {
+    color:#ff9fa7;
+    background:#48252d;
+    border-color:#a55362;
+}
+.alerts-section .pw-alert-copy {min-width:0;}
+.alerts-section .pw-alert-copy strong {
+    display:block;
+    color:#f0fafb;
+    font-size:14px;
+    line-height:1.4;
+    font-weight:730;
+}
+.alerts-section .alert-item .pw-alert-copy strong {color:#ffddae;}
+.alerts-section .alert-item.pw-alert-critical .pw-alert-copy strong {color:#ffc7cf;}
+.alerts-section .pw-alert-copy p {
+    margin:5px 0 0;
+    color:#a6c6c7;
+    font-size:12px;
+    line-height:1.5;
+}
+.alerts-section .alert-item .pw-alert-copy p {color:#e2c49b;}
+
+/* Alert settings: precise input tiles and clear save action. */
+.settings-section .settings-card {
+    border:1px solid #30485d;
+    border-radius:14px;
+    padding:0;
+    background:linear-gradient(150deg,#142334,#0d1927);
+    overflow:hidden;
+    box-shadow:inset 0 1px 0 rgba(235,246,255,.045);
+}
+.pw-settings-intro {
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    flex-wrap:wrap;
+    gap:10px;
+    padding:18px 20px 16px;
+    border-bottom:1px solid #2a4155;
+}
+.pw-settings-kicker {
+    display:block;
+    margin-bottom:5px;
+    color:#7ecdf0;
+    font-size:9px;
+    font-weight:740;
+    letter-spacing:1.35px;
+}
+.pw-settings-intro h3 {
+    margin:0;
+    color:#ebf6ff;
+    font-size:17px;
+    font-weight:730;
+    letter-spacing:-.3px;
+}
+.pw-settings-intro p {
+    margin:5px 0 0;
+    color:#97b2c6;
+    font-size:12px;
+}
+.pw-settings-count {
+    padding:7px 11px;
+    border:1px solid #3b5970;
+    border-radius:999px;
+    color:#b3d0df;
+    background:#172b3c;
+    font-size:11px;
+    font-weight:650;
+}
+.settings-section #alertSettingsForm {
+    display:grid;
+    grid-template-columns:repeat(3,minmax(0,1fr));
+    gap:13px;
+    padding:17px 19px 19px;
+}
+.settings-section .threshold-control {
+    min-width:0;
+    margin:0;
+    padding:17px;
+    border:1px solid #30485b;
+    border-radius:12px;
+    background:#101e2d;
+}
+.settings-section .threshold-control label {
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    gap:10px;
+    margin:0 0 25px;
+    color:#d4e8f6;
+    font-size:13px;
+    font-weight:690;
+}
+.settings-section .threshold-control output {
+    display:inline-block;
+    flex:0 0 auto;
+    min-width:49px;
+    text-align:center;
+    padding:5px 8px;
+    border:1px solid #3b6884;
+    border-radius:8px;
+    color:#97e1ff;
+    background:#193750;
+    font-size:13px;
+    line-height:1.25;
+    font-weight:760;
+    font-variant-numeric:tabular-nums;
+}
+.settings-section .threshold-control input[type="range"] {
+    display:block;
+    width:100%;
+    margin:0;
+    accent-color:#5dc9f5;
+    cursor:pointer;
+}
+.settings-section .settings-actions {
+    grid-column:1/-1;
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    flex-wrap:wrap;
+    gap:12px;
+    margin-top:3px;
+    padding:16px 1px 0;
+    border-top:1px solid #2d4458;
+}
+.settings-section #settingsStatus {
+    color:#a2bed0;
+    font-size:12px;
+    line-height:1.45;
+    margin:0;
+}
+.settings-section #saveSettings {
+    min-height:39px;
+    padding:9px 18px;
+    border:1px solid #71d3f9;
+    border-radius:9px;
+    background:linear-gradient(145deg,#8ce0ff,#63c6ef);
+    color:#0b2636;
+    font-family:inherit;
+    font-size:12px;
+    font-weight:760;
+    cursor:pointer;
+}
+.settings-section #saveSettings:hover:not(:disabled) {
+    opacity:1;
+    background:#b1eaff;
+}
+.settings-section #saveSettings:disabled {cursor:not-allowed;opacity:.5;}
+
+@media(max-width:1550px) {
+    .hardware-container.pw-hardware-overview .hardware-grid {columns:2;}
+}
+@media(max-width:1050px) {
+    .hardware-container.pw-hardware-overview .hardware-grid {columns:1;}
+    .settings-section #alertSettingsForm {grid-template-columns:1fr;}
+}
+@media(max-width:700px) {
+    .hardware-section .hardware-actions {justify-content:flex-start;}
+    .hardware-section .hardware-device-header {padding:13px;}
+    .settings-section #alertSettingsForm {padding:13px;}
+    .pw-settings-intro {padding:16px;}
+    .alerts-section :is(.alerts-ok,.alert-item) {padding:15px;}
+}
+@media(prefers-reduced-motion:reduce) {
+    .hardware-section :is(.nav-item,.hardware-customize-button,.pw-hardware-detail-toggle),
+    .pw-hardware-view-switch button {transition:none;}
+}
