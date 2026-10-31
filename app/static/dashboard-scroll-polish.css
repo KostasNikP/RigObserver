@@ -1,0 +1,19 @@
+/* Scroll behavior polish for RigObserver cards.
+   Keep content scrollable when a saved parent size is genuinely too small.
+   Never hide overflow with readings inside a resized card. */
+
+/* In expanded Widgets view, scrolling belongs to the existing card body.
+   Avoid a redundant nested scroller around the same mini-widget list. */
+.overview-section .dashboard .pw3-cpu-card.pw3-expanded[data-view="widgets"] .pw-mini-region:not(.pw-mini-free),
+.overview-section .dashboard .pw3-gpu-card.pw3-expanded[data-view="widgets"] .pw-mini-region:not(.pw-mini-free) {
+    overflow:visible;
+    flex:0 0 auto;
+    min-height:0;
+}
+
+/* Charts should never create a horizontal scrollbar. Preserve readable
+   vertical scrolling when the card has been manually made short. */
+.overview-section .dashboard .pw-overview-content {
+    overflow-x:hidden;
+    overflow-y:auto;
+}
