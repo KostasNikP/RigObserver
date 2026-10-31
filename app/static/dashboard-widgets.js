@@ -148,7 +148,13 @@ function createCard(item) {
     grip.setAttribute("role", "button");
     grip.setAttribute("aria-label", "Move " + item.name + " widget. Drag to position, or use arrow keys.");
     const title=el("div","pw-mini-title");
-    title.append(el("strong","",item.name),el("small","",item.type));
+    const titleName=el("strong","",item.name);
+    const titleType=el("small","",item.type);
+    // Native tooltip reveals the complete name even when CSS truncates
+    // the visible heading to fit a narrow mini widget.
+    title.title=item.name;
+    titleName.title=item.name;
+    title.append(titleName,titleType);
     const buttons=el("div","pw-mini-buttons");
     const button=el("button","pw-mini-mode","Graph");
     button.type="button";
@@ -198,7 +204,7 @@ function createCard(item) {
         node.classList.add("pw-mini-manual-width");
     }
 
-    const card={item,node,stat,value,extrema,graph,gauge,gaugeValue,
+    const card={item,node,title,titleName,titleType,stat,value,extrema,graph,gauge,gaugeValue,
         bigValue,line,area,button,mode:"graph",samples:[],lastTime:null};
     modeOf(card,["graph","gauge","value"].includes(previous.mode)?
         previous.mode:"graph");
@@ -725,6 +731,13 @@ function render(group) {
 }
 function updateCard(card,item,time) {
     card.item=item;
+    if(card.titleName.textContent!==item.name) {
+        card.titleName.textContent=item.name;
+        card.titleName.title=item.name;
+        card.title.title=item.name;
+    }
+    if(card.titleType.textContent!==item.type)
+        card.titleType.textContent=item.type;
     if(card.lastTime!==time) {
         card.samples.push(item.value);
         if(card.samples.length>MAX_HISTORY)card.samples.shift();
