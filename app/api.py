@@ -10,6 +10,7 @@ from fastapi.staticfiles import StaticFiles
 
 
 from app.collector import MetricsCollector
+from app.version import APP_VERSION
 
 from pydantic import BaseModel, Field
 
@@ -39,7 +40,7 @@ async def lifespan(app: FastAPI):
 app = FastAPI(
     title="RigObserver API",
     description="System and Network Monitoring API",
-    version="1.0.0",
+    version=APP_VERSION,
     lifespan=lifespan
 )
 
