@@ -110,6 +110,7 @@ function resetOrder() {
     changed();
     announcer.textContent = "Dashboard card order restored to default.";
 }
+window.addEventListener("pw-apply-recommended-layout",resetOrder);
 
 let session = null;
 let autoScrollFrame = 0;
