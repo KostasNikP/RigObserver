@@ -64,6 +64,15 @@ apply.addEventListener("click",()=>{
         const hint=document.getElementById("pwParentLayoutHint");
         if(hint)hint.textContent="Recommended setup applied. Customize any card whenever you like.";
         window.dispatchEvent(new Event("resize"));
+        // Grid columns, custom widgets and graphs need a layout frame to
+        // settle before checking whether any card still scrolls internally.
+        // Run two bounded passes, never an ongoing resize loop.
+        requestAnimationFrame(()=>requestAnimationFrame(()=>{
+            window.dispatchEvent(new Event("pw-fit-recommended-cards"));
+            requestAnimationFrame(()=>{
+                window.dispatchEvent(new Event("pw-fit-recommended-cards"));
+            });
+        }));
     } catch(error) {
         console.error("Unable to apply recommended dashboard:",error);
         dialog.close();
