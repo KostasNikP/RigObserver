@@ -92,6 +92,30 @@ for(const [group,selector] of selectors){
     grip.addEventListener("pointercancel",e=>finish(e,false));
     grip.addEventListener("lostpointercapture",e=>finish(e,false));
 }
+// Recommended is an explicit user preset, not the initial layout.
+// Apply readable two-column card widths on wide windows and stack cards on
+// smaller ones. All sizes remain user-resizable and persist normally.
+window.addEventListener("pw-apply-recommended-layout",()=>{
+    const dashboard=document.querySelector("#overview .dashboard");
+    if(!dashboard)return;
+    const available=Math.max(MIN_WIDTH,dashboard.clientWidth);
+    const half=Math.max(MIN_WIDTH,Math.floor((available-18)/2));
+    const wide=available>=1050;
+    const heights={cpu:390,gpu:425,ram:330,storage:340,
+        network:345,motherboard:375};
+    saved={};
+    for(const [group,selector] of selectors) {
+        const card=document.querySelector(selector);
+        if(!card)continue;
+        const width=wide?half:available;
+        saved[group]={width,height:heights[group]};
+        card.style.removeProperty("--pw-parent-width");
+        card.style.removeProperty("height");
+        apply(card,group);
+    }
+    save();
+    window.dispatchEvent(new Event("resize"));
+});
 window.addEventListener("resize",()=>{
     for(const [group,selector] of selectors){
         const card=document.querySelector(selector);
