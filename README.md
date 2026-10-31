@@ -102,6 +102,14 @@ Windows may display an unrecognized publisher warning because the installer is n
 
 The Windows application currently keeps using the legacy **`%LOCALAPPDATA%\PulseWatch\data`** directory, including WebView storage, to preserve saved dashboards and other data when upgrading from PulseWatch. The existing `pulsewatch_*` localStorage keys are intentionally retained for compatibility; these internal identifiers do not change the RigObserver branding.
 
+## Upcoming v0.1.1 release
+
+The v0.1.1 Windows installer is being prepared. **v0.1.0 is still the latest published download** until the new installer has been built, tested, and uploaded to a GitHub Release.
+
+To build v0.1.1 on Windows, close RigObserver and run `build_release.bat` from the project directory. The script installs the project requirements and PyInstaller, publishes the self-contained .NET sensor bridge, packages the desktop app, and compiles the installer with **Inno Setup 6**.
+
+Expected output: `installer\RigObserver_Setup_v0.1.1.exe`. See [v0.1.1 release notes](RELEASE_NOTES_v0.1.1.md) for the changelog. Only after testing this installer should the GitHub tag `v0.1.1`, release, and download links be published.
+
 ## Development Setup
 
 ### Prerequisites
@@ -144,7 +152,7 @@ dotnet publish .\sensor_bridge\sensor_bridge.csproj -c Release -r win-x64 --self
 
 The compiled application is created in `dist\RigObserver\RigObserver.exe`.
 
-To package an installer, open **`RigObserver.iss`** in Inno Setup 6 and choose **Build → Compile**. The expected installer path is `installer\RigObserver_Setup_v0.1.0.exe`.
+To package an installer, open **`RigObserver.iss`** in Inno Setup 6 and choose **Build → Compile**, or run `build_release.bat` for the complete build. The expected installer path is `installer\RigObserver_Setup_v0.1.1.exe`.
 
 The `.spec` file expects `sensor_bridge\bin\Release\net10.0\win-x64\publish\sensor_bridge.exe` to exist before packaging. Install Inno Setup separately when building the installer.
 
