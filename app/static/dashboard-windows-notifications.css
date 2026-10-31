@@ -1,0 +1,145 @@
+/* Optional Windows toast notifications in Alert Settings. */
+.pw-windows-notifications-settings {
+    margin:0;
+    padding:17px 20px 19px;
+    border-top:1px solid #2a4356;
+    background:linear-gradient(145deg,#112435,#0c1c29);
+}
+.pw-windows-notifications-header {
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    gap:18px;
+    flex-wrap:wrap;
+}
+.pw-windows-notifications-heading {
+    display:flex;
+    align-items:center;
+    gap:12px;
+    min-width:0;
+}
+.pw-windows-notifications-symbol {
+    display:grid;
+    place-items:center;
+    flex:0 0 38px;
+    height:38px;
+    border:1px solid #3a6882;
+    border-radius:11px;
+    background:#19394d;
+    color:#8cddfa;
+}
+.pw-windows-notifications-symbol svg {
+    width:19px;
+    height:19px;
+    fill:none;
+    stroke:currentColor;
+    stroke-width:1.8;
+    stroke-linecap:round;
+    stroke-linejoin:round;
+}
+.pw-windows-notifications-heading h3 {
+    margin:0;
+    color:#e7f5ff;
+    font-size:14px;
+    font-weight:740;
+    line-height:1.4;
+}
+.pw-windows-notifications-heading p {
+    margin:4px 0 0;
+    color:#98b7ca;
+    font-size:12px;
+    line-height:1.4;
+}
+.pw-windows-notifications-switch {
+    display:flex;
+    align-items:center;
+    gap:10px;
+    flex:0 0 auto;
+    color:#d6eaf7;
+    font-size:12px;
+    font-weight:650;
+    cursor:pointer;
+}
+.pw-windows-notifications-switch input[type="checkbox"] {
+    appearance:none;
+    -webkit-appearance:none;
+    position:relative;
+    display:inline-block;
+    box-sizing:border-box;
+    width:36px;
+    height:21px;
+    margin:0;
+    border:1px solid #456377;
+    border-radius:999px;
+    background:#213649;
+    cursor:pointer;
+    transition:background .16s ease,border-color .16s ease;
+}
+.pw-windows-notifications-switch input[type="checkbox"]::after {
+    content:"";
+    position:absolute;
+    top:2px;
+    left:2px;
+    width:15px;
+    height:15px;
+    border-radius:50%;
+    background:#a4bdce;
+    transition:transform .16s ease,background .16s ease;
+}
+.pw-windows-notifications-switch input[type="checkbox"]:checked {
+    border-color:#67c8ee;
+    background:#256a8c;
+}
+.pw-windows-notifications-switch input[type="checkbox"]:checked::after {
+    transform:translateX(15px);
+    background:#eefaff;
+}
+.pw-windows-notifications-footer {
+    display:flex;
+    align-items:center;
+    gap:12px;
+    flex-wrap:wrap;
+    margin-top:13px;
+    padding-left:50px;
+}
+.pw-windows-notifications-footer button {
+    box-sizing:border-box;
+    min-height:34px;
+    padding:7px 13px;
+    border:1px solid #426e89;
+    border-radius:9px;
+    background:#203c52;
+    color:#dff4ff;
+    font:inherit;
+    font-size:12px;
+    font-weight:680;
+    cursor:pointer;
+}
+.pw-windows-notifications-footer button:hover:not(:disabled) {
+    background:#2b5470;
+    border-color:#8bd7f8;
+}
+.pw-windows-notifications-footer button:disabled {
+    opacity:.46;
+    cursor:not-allowed;
+}
+#pwWindowsNotificationsStatus {
+    flex:1 1 270px;
+    color:#9fbace;
+    font-size:11px;
+    line-height:1.4;
+}
+.pw-windows-notifications-settings :is(input,button):focus-visible {
+    outline:2px solid #91dfff;
+    outline-offset:3px;
+}
+@media(max-width:700px) {
+    .pw-windows-notifications-settings {padding:15px;}
+    .pw-windows-notifications-footer {padding-left:0;}
+}
+@media(prefers-reduced-motion:reduce) {
+    .pw-windows-notifications-switch input[type="checkbox"],
+    .pw-windows-notifications-switch input[type="checkbox"]::after {
+        transition:none;
+    }
+}
