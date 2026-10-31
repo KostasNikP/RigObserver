@@ -103,3 +103,10 @@
     outline:2px solid #7bd7fb;
     outline-offset:2px;
 }
+
+/* Keyboard focus stays clearly visible in both icon-only and open sidebar. */
+.sidebar-nav .nav-item:focus-visible,
+.sidebar .brand:focus-visible {
+    outline:2px solid #7bd7fb;
+    outline-offset:2px;
+}
