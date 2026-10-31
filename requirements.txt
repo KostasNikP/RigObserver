@@ -2,3 +2,4 @@
 fastapi[standard]
 psutil
 pywebview==6.2.1
+winotify==1.1.0
