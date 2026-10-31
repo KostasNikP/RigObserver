@@ -25,6 +25,7 @@
     <link rel="stylesheet" href="/static/dashboard-sidebar-round3.css?v=0.3.0-sidepolish1">
     <link rel="stylesheet" href="/static/dashboard-polish-round4.css?v=0.3.0-polish4">
     <link rel="stylesheet" href="/static/dashboard-header-refine.css?v=0.3.0-header2">
+    <link rel="stylesheet" href="/static/dashboard-system-polish.css?v=0.3.0-system1">
 </head>
 
 <body>
@@ -116,7 +117,6 @@
                 <div class="topbar-heading">
                     <span class="eyebrow">RIGOBSERVER / WORKSPACE</span>
                     <h1>System Dashboard</h1>
-                    <p class="pw-dashboard-subtitle"><span class="pw-dashboard-subtitle-lead">Your PC, at a glance.</span><span class="pw-dashboard-subtitle-detail">Live performance, temperatures and hardware health.</span></p>
                 </div>
 
                 <div class="topbar-right">
@@ -541,22 +541,30 @@
                         </div>
                 
                         <div class="hardware-actions">
-                        
+                            <div class="pw-hardware-view-switch" role="group" aria-label="Hardware detail level">
+                                <button id="pwHardwareOverview" type="button" aria-pressed="true" class="active">Overview</button>
+                                <button id="pwHardwareAllSensors" type="button" aria-pressed="false">All Sensors</button>
+                            </div>
                             <button id="customizeSensors" type="button" class="hardware-customize-button">
-                                Customize Sensors
+                                Customize
                             </button>
                             <button id="pwHardwareLayoutOpen" type="button" class="hardware-customize-button">
-                                Arrange Cards
+                                Arrange
                             </button>
-                        
                             <span id="hardwareStatus" class="live-indicator" data-state="connecting">
                                 CONNECTING
                             </span>
-                        
                         </div>
                     </div>
                 
-                    <div id="hardware-container" class="hardware-container">
+                    <div class="pw-hardware-detail-actions" id="pwHardwareDetailActions" hidden>
+                        <span>Sensor groups</span>
+                        <div>
+                            <button id="pwHardwareExpandAll" type="button">Expand all</button>
+                            <button id="pwHardwareCollapseAll" type="button">Collapse all</button>
+                        </div>
+                    </div>
+                    <div id="hardware-container" class="hardware-container pw-hardware-overview">
                         <p>Loading hardware sensors...</p>
                     </div>
                 
@@ -710,7 +718,7 @@
                             <p>Performance warnings and thresholds</p>
                         </div>
 
-                        <span id="alerts-count" class="alerts-badge">
+                        <span id="alerts-count" class="alerts-badge" data-state="healthy" role="status">
                             0 active
                         </span>
 
@@ -733,12 +741,19 @@
                     </div>
                 
                     <div class="settings-card">
-                
+                        <div class="pw-settings-intro">
+                            <div>
+                                <span class="pw-settings-kicker">THRESHOLD RULES</span>
+                                <h3>Monitoring thresholds</h3>
+                                <p>Set the usage level that triggers a warning.</p>
+                            </div>
+                            <span class="pw-settings-count">3 metrics</span>
+                        </div>
                         <form id="alertSettingsForm">
                 
                             <div class="threshold-control">
                                 <label for="cpuThreshold">
-                                    CPU Usage
+                                    <span>CPU Usage</span>
                                     <output id="cpuThresholdValue">90%</output>
                                 </label>
                 
@@ -747,7 +762,7 @@
                 
                             <div class="threshold-control">
                                 <label for="ramThreshold">
-                                    RAM Usage
+                                    <span>Memory Usage</span>
                                     <output id="ramThresholdValue">85%</output>
                                 </label>
                 
@@ -756,7 +771,7 @@
                 
                             <div class="threshold-control">
                                 <label for="diskThreshold">
-                                    Disk Usage
+                                    <span>Disk Usage</span>
                                     <output id="diskThresholdValue">90%</output>
                                 </label>
                 
@@ -876,12 +891,12 @@
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
 <!-- Dashboard logic -->
-<script src="/static/script.js?v=0.3.0-widgets2"></script>
+<script src="/static/script.js?v=0.3.0-alertpolish1"></script>
 
 <!-- Notifications -->
 <script src="/static/notifications.js?v=0.3.0-gpu-fix1"></script>
 <script src="/static/settings.js?v=0.3.0-gpu-fix1"></script>
-<script src="/static/hardware.js?v=0.3.0-widgets3"></script>
+<script src="/static/hardware.js?v=0.3.0-hardwarepolish1"></script>
 <script src="/static/dashboard-widgets.js?v=0.3.0-widgets16"></script>
 <script src="/static/dashboard-extra-modes.js?v=0.3.0-extra2"></script>
 <script src="/static/dashboard-parent-layout.js?v=0.3.0-parent3"></script>
