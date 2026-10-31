@@ -8,6 +8,7 @@ import time
 import uvicorn
 
 from app.launch_admin_helper import launch_admin_helper
+from app.windows_notifications import DesktopNotificationBridge
 
 
 APP_TITLE = "RigObserver - System Monitor"
@@ -78,6 +79,7 @@ def run_desktop():
         webview.create_window(
             title=APP_TITLE,
             url=APP_URL,
+            js_api=DesktopNotificationBridge(),
             width=1400,
             height=900,
             min_size=(950, 650),
