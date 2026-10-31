@@ -8,7 +8,7 @@ datas = [
     ('sensor_bridge/bin/Release/net10.0/win-x64/publish', 'sensor_bridge'),
 ]
 binaries = []
-hiddenimports = ['app.api']
+hiddenimports = ['app.api', 'winotify']
 tmp_ret = collect_all('webview')
 datas += tmp_ret[0]; binaries += tmp_ret[1]; hiddenimports += tmp_ret[2]
 
