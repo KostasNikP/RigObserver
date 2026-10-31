@@ -26,7 +26,7 @@ This release builds on v0.1.0, focusing on dashboard customization, hardware mon
 
 ## Installation and updating
 
-1. Download `RigObserver_Setup_v0.1.1.exe` from the **v0.1.1 GitHub Release**, once published.
+1. Download `RigObserver_Setup_v0.1.1.exe` from the **v0.1.1 GitHub Release**.
 2. Close the existing RigObserver application.
 3. Run the installer and follow its steps.
 
