@@ -16,4 +16,8 @@
 .overview-section .dashboard .pw-overview-content {
     overflow-x:hidden;
     overflow-y:auto;
+    /* Let the mouse wheel continue scrolling the page whenever this
+       card cannot scroll further. Previously overscroll-behavior:contain
+       trapped wheel movement over sensor widgets in the WebView. */
+    overscroll-behavior-y:auto;
 }
