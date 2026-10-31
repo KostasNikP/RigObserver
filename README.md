@@ -4,9 +4,9 @@
 
 RigObserver is a Windows desktop application for tracking system performance, hardware sensors, network activity, and system health in one customizable dashboard. Built with Python, FastAPI, C#/.NET, LibreHardwareMonitor, JavaScript, and WebView2.
 
-[**Download the latest published Windows installer**](https://github.com/KostasNikP/RigObserver/releases/latest) · [**View all releases**](https://github.com/KostasNikP/RigObserver/releases) · [**What's new in v0.1.1**](RELEASE_NOTES_v0.1.1.md)
+[**Download RigObserver v0.1.1 for Windows**](https://github.com/KostasNikP/RigObserver/releases/download/v0.1.1/RigObserver_Setup_v0.1.1.exe) · [**Latest release**](https://github.com/KostasNikP/RigObserver/releases/latest) · [**Changelog**](RELEASE_NOTES_v0.1.1.md)
 
-> **Version 0.1.1:** The source code and Windows installer have been built and tested locally. The v0.1.1 download becomes available on the Releases page when the new release is published. Until then, the latest published installer is v0.1.0.
+> **Latest release: v0.1.1** — Windows Notifications & Dashboard Improvements. Published October 31, 2026.
 
 ## Live demo
 
@@ -64,10 +64,9 @@ Sensor availability depends on device hardware, drivers, permissions, and what L
 
 ## Download and installation
 
-1. Go to [**GitHub Releases**](https://github.com/KostasNikP/RigObserver/releases).
-2. Download the installer for the release you want, for example `RigObserver_Setup_v0.1.1.exe` once v0.1.1 is published.
-3. Close any running RigObserver instance, run the installer, and follow the setup wizard.
-4. Launch **RigObserver** from the Start menu or its optional desktop shortcut.
+1. Download [**RigObserver_Setup_v0.1.1.exe**](https://github.com/KostasNikP/RigObserver/releases/download/v0.1.1/RigObserver_Setup_v0.1.1.exe) from the [official v0.1.1 release](https://github.com/KostasNikP/RigObserver/releases/tag/v0.1.1).
+2. Close any running RigObserver instance, run the installer, and follow the setup wizard.
+3. Launch **RigObserver** from the Start menu or its optional desktop shortcut.
 
 **Requirements:** Windows x64 and Microsoft Edge WebView2 Runtime. The packaged application includes its Python backend and self-contained .NET sensor bridge; you do not need to install the Python or .NET SDK to use it.
 
