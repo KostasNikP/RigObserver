@@ -825,11 +825,16 @@ function applyCatalog(timestamp) {
         const ready = group==="cpu"||group==="gpu"||group==="motherboard" ||
             metricsCatalog[group].size>0;
         if(state.selected[group]===null && ready && merged.size) {
-            state.selected[group]=state.recommendedPending[group]
+            const picks=state.recommendedPending[group]
                 ? recommended(group,[...merged.values()])
                 : defaults(group,[...merged.values()]);
-            state.recommendedPending[group]=false;
-            modified=true;
+            // If a partial hardware inventory arrives before psutil metrics,
+            // retry the Recommended selection on the next sensor update.
+            if(picks.length || !state.recommendedPending[group]) {
+                state.selected[group]=picks;
+                state.recommendedPending[group]=false;
+                modified=true;
+            }
         }
         render(group);
         for(const id of state.selected[group]||[]) {
@@ -1026,6 +1031,7 @@ function resetGroupLayout(group) {
     }
     state.free[group] = false;
     state.freePriority[group] = null;
+    state.recommendedPending[group] = false;
     freePins.delete(group);
 
     for (const card of cards.values()) {
@@ -1140,7 +1146,9 @@ document.getElementById("pwCustomizeAll").addEventListener("click",()=>{
 document.getElementById("pwCustomizeApply").addEventListener("click",()=>{
     if(!draft)return;
     for(const group of GROUPS) {
-        state.selected[group]=draft[group];render(group);
+        state.selected[group]=draft[group];
+        state.recommendedPending[group]=false;
+        render(group);
     }
     save();
     const selectedGroup=category;close();
@@ -1155,8 +1163,9 @@ function applyRecommendedSensors() {
         for(const id of Object.keys(state.layout)) {
             if(id.startsWith(group+":")) delete state.layout[id];
         }
-        state.selected[group]=items.length?recommended(group,items):null;
-        state.recommendedPending[group]=!items.length;
+        const picks=items.length?recommended(group,items):[];
+        state.selected[group]=picks.length?picks:null;
+        state.recommendedPending[group]=!picks.length;
         state.free[group]=false;
         state.freePriority[group]=null;
         freePins.delete(group);
