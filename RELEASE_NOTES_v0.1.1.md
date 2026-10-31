@@ -34,4 +34,3 @@ The installer retains the existing application identity and legacy data location
 
 **Requirements:** Windows x64 and Microsoft Edge WebView2 Runtime. The installer includes the bundled Python application and sensor bridge.
 
-**Note:** This file prepares the release announcement. Do not publish the release or update the README's download link until the new installer has been built and tested.
