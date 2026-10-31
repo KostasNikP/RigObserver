@@ -9,10 +9,11 @@ import uvicorn
 
 from app.launch_admin_helper import launch_admin_helper
 from app.windows_notifications import DesktopNotificationBridge
+from app.version import APP_VERSION
 
 
-APP_TITLE = "RigObserver - System Monitor"
-APP_URL = "http://127.0.0.1:8000/dashboard?v=0.3.0-gpu-fix1"
+APP_TITLE = f"RigObserver v{APP_VERSION} - System Monitor"
+APP_URL = f"http://127.0.0.1:8000/dashboard?v={APP_VERSION}"
 
 
 def run_desktop():
