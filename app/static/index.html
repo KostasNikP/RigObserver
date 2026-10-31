@@ -22,6 +22,7 @@
     <link rel="stylesheet" href="/static/dashboard-control-alignment.css?v=0.3.0-controls1">
     <link rel="stylesheet" href="/static/dashboard-polish-round1.css?v=0.3.0-polish1">
     <link rel="stylesheet" href="/static/dashboard-polish-round2.css?v=0.3.0-polish2">
+    <link rel="stylesheet" href="/static/dashboard-sidebar-round3.css?v=0.3.0-sidepolish1">
 </head>
 
 <body>
@@ -31,7 +32,13 @@
         <!-- SIDEBAR -->
         <aside class="sidebar">
             <button id="pwSidebarToggle" class="pw-sidebar-toggle" type="button"
-                    aria-label="Collapse sidebar" aria-expanded="true" title="Collapse sidebar">‹</button>
+                    aria-label="Collapse sidebar" aria-expanded="true" title="Collapse sidebar">
+                <svg class="pw-sidebar-toggle-icon" viewBox="0 0 24 24" aria-hidden="true">
+                    <rect x="3.5" y="4" width="17" height="16" rx="3"/>
+                    <path d="M9 4v16"/>
+                    <path class="pw-sidebar-toggle-chevron" d="m16 9-3 3 3 3"/>
+                </svg>
+            </button>
 
             <a href="#overview" class="brand">
                 <div class="brand-icon"><img src="/static/rigobserver-icon.png?v=1" width="42" height="42" alt=""></div>
@@ -43,36 +50,39 @@
             </a>
 
             <div class="sidebar-section">
-                <span class="sidebar-label">WORKSPACE</span>
+                <span class="sidebar-label">MONITORING</span>
 
                 <nav class="sidebar-nav">
 
                     <a href="#overview" class="nav-item active">
-                        <span class="nav-icon">◫</span>
+                        <span class="nav-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3.5" y="3.5" width="7" height="7" rx="1.5"/><rect x="13.5" y="3.5" width="7" height="7" rx="1.5"/><rect x="3.5" y="13.5" width="7" height="7" rx="1.5"/><rect x="13.5" y="13.5" width="7" height="7" rx="1.5"/></svg></span>
                         <span class="pw-nav-label">Overview</span>
                     </a>
 
                     <a href="#hardware" class="nav-item">
-                        <span class="nav-icon">▣</span>
+                        <span class="nav-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="5" y="5" width="14" height="14" rx="2.5"/><path d="M9 9h6v6H9zM9 2v3m6-3v3M9 19v3m6-3v3M2 9h3m-3 6h3m14-6h3m-3 6h3"/></svg></span>
                         <span class="pw-nav-label">Hardware Monitor</span>
                     </a>
 
                     <a href="#live-charts" class="nav-item">
-                        <span class="nav-icon">⌁</span>
+                        <span class="nav-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M2.5 12h4l3-6 4.5 12 3-6h4.5"/></svg></span>
                         <span class="pw-nav-label">Live Monitoring</span>
                     </a>
 
                     <a href="#history" class="nav-item">
-                        <span class="nav-icon">◷</span>
+                        <span class="nav-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M12 6.5V12l3.5 2.5"/></svg></span>
                         <span class="pw-nav-label">History</span>
                     </a>
 
+                    <div class="pw-sidebar-section-divider" aria-hidden="true"></div>
+                    <span class="pw-sidebar-group-label">TOOLS</span>
+
                     <a href="#alerts" class="nav-item">
-                        <span class="nav-icon">⚠</span>
+                        <span class="nav-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M10.4 4.3 2.7 18a1.6 1.6 0 0 0 1.4 2.4h15.8a1.6 1.6 0 0 0 1.4-2.4L13.6 4.3a1.8 1.8 0 0 0-3.2 0Z"/><path d="M12 9v4.5M12 17.2h.01"/></svg></span>
                         <span class="pw-nav-label">System Alerts</span>
                     </a>
                     <a href="#alert-settings" class="nav-item">
-                        <span class="nav-icon">⚙</span>
+                        <span class="nav-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M10 3.1h4l.6 2.2 1.8.8 2.1-1.1 2.3 2.8-1.4 1.9.4 2.3 2 1.3-1.3 3.6-2.4-.2-1.5 1.6.2 2.4-3.6 1.3-1.3-2-2.3-.4-1.9 1.4-2.8-2.3 1.1-2.1-.8-1.8-2.2-.6v-4l2.2-.6.8-1.8-1.1-2.1L7.2 5l1.9 1.4 2.3-.4z"/><circle cx="12" cy="12" r="2.7"/></svg></span>
                         <span class="pw-nav-label">Alert Settings</span>
                     </a>
 
@@ -80,11 +90,16 @@
             </div>
 
             <div class="sidebar-bottom">
-                <span class="sidebar-bottom-label">
-                    MONITORING ENVIRONMENT
-                </span>
-                <strong>Local Machine</strong>
-                <span>Windows System</span>
+                <span class="sidebar-bottom-label">MONITORING DEVICE</span>
+                <div class="pw-sidebar-device">
+                    <span class="pw-sidebar-device-icon" aria-hidden="true">
+                        <svg viewBox="0 0 24 24"><rect x="4" y="5" width="16" height="12" rx="2"/><path d="M9 21h6m-3-4v4"/></svg>
+                    </span>
+                    <span class="pw-sidebar-device-copy">
+                        <strong>Local Machine</strong>
+                        <span>Windows System</span>
+                    </span>
+                </div>
             </div>
 
         </aside>
@@ -868,7 +883,7 @@
 <script src="/static/dashboard-widgets.js?v=0.3.0-widgets16"></script>
 <script src="/static/dashboard-extra-modes.js?v=0.3.0-extra2"></script>
 <script src="/static/dashboard-parent-layout.js?v=0.3.0-parent3"></script>
-<script src="/static/sidebar-layout.js?v=0.3.0-side2"></script>
+<script src="/static/sidebar-layout.js?v=0.3.0-side3"></script>
 <script src="/static/overview-options.js?v=0.3.0-options2"></script>
 <script src="/static/dashboard-card-order.js?v=0.3.0-order3"></script>
 <script src="/static/dashboard-layout-modes.js?v=0.3.0-layout3"></script>
