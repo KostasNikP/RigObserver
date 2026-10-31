@@ -602,19 +602,27 @@ function setHistoryChartData(chart, rows, fields) {
 function renderAlerts(alerts) {
     const container = document.getElementById("alerts-container");
     const count = document.getElementById("alerts-count");
-
     if (!container || !count) return;
 
     container.replaceChildren();
-    count.textContent = `${alerts.length} active`;
+    count.textContent = alerts.length === 1 ? "1 active alert" : `${alerts.length} active alerts`;
+    count.dataset.state = alerts.length ? "warning" : "healthy";
 
     if (alerts.length === 0) {
         const message = document.createElement("div");
-
         message.className = "alerts-ok";
-        message.textContent =
-            "✓ All monitored metrics are within configured thresholds.";
-
+        const icon = document.createElement("span");
+        icon.className = "pw-alert-icon";
+        icon.setAttribute("aria-hidden", "true");
+        icon.textContent = "✓";
+        const copy = document.createElement("div");
+        copy.className = "pw-alert-copy";
+        const title = document.createElement("strong");
+        title.textContent = "All systems within limits";
+        const detail = document.createElement("p");
+        detail.textContent = "No active alerts. Monitored usage is below your configured thresholds.";
+        copy.append(title,detail);
+        message.append(icon,copy);
         container.appendChild(message);
         return;
     }
@@ -622,19 +630,24 @@ function renderAlerts(alerts) {
     alerts.forEach(alert => {
         const alertBox = document.createElement("div");
         alertBox.className = "alert-item";
-
+        if (String(alert.level || alert.severity || "").toLowerCase() === "critical")
+            alertBox.classList.add("pw-alert-critical");
+        const icon = document.createElement("span");
+        icon.className = "pw-alert-icon";
+        icon.setAttribute("aria-hidden","true");
+        icon.textContent = "!";
+        const copy = document.createElement("div");
+        copy.className = "pw-alert-copy";
         const title = document.createElement("strong");
         title.textContent = alert.message;
-
         const description = document.createElement("p");
         description.textContent =
-            `Current: ${alert.value}% | Threshold: ${alert.threshold}%`;
-
-        alertBox.append(title, description);
+            `Current: ${alert.value}% · Threshold: ${alert.threshold}%`;
+        copy.append(title,description);
+        alertBox.append(icon,copy);
         container.appendChild(alertBox);
     });
 }
-
 
 // ==========================================
 // UPDATE DASHBOARD
