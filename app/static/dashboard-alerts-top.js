@@ -19,7 +19,6 @@ if(![root,toggle,badge,panel,summary,list,close,toast,toastTitle,
     toastMessage,toastView,toastClose].every(Boolean))return;
 
 let priorKeys=new Set();
-let lastItems=[];
 let toastTimeout=null;
 
 const alertKey=(alert)=>[
@@ -60,6 +59,8 @@ function makeAlertRow(alert) {
     return row;
 }
 function renderList(alerts) {
+    // Keep the user's position when alerts refresh while the popover is open.
+    const previousScroll=list.scrollTop;
     list.replaceChildren();
     if(!alerts.length) {
         const ok=document.createElement("div");
@@ -75,10 +76,12 @@ function renderList(alerts) {
         text.append(title,detail);
         ok.append(icon,text);
         list.append(ok);
+        list.scrollTop=previousScroll;
         return;
     }
     // Panel is scrollable; show every active alert, not a hidden subset.
     for(const alert of alerts)list.append(makeAlertRow(alert));
+    list.scrollTop=previousScroll;
 }
 function notifyNewAlert(items) {
     if(!items.length)return;
@@ -96,7 +99,6 @@ function notifyNewAlert(items) {
 }
 function update(alerts) {
     if(!Array.isArray(alerts))return;
-    lastItems=alerts;
     const count=alerts.length;
     const critical=alerts.some(isCritical);
     root.dataset.state=count?(critical?"critical":"warning"):"healthy";
