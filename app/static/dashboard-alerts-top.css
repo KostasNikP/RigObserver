@@ -20,7 +20,9 @@
     border-radius:10px;
     background:linear-gradient(145deg,#1b3043,#132436);
     color:#dceefd;
-    font:650 12px/1.3 inherit;
+    font-size:12px;
+    font-weight:650;
+    line-height:1.3;
     font-family:inherit;
     cursor:pointer;
     transition:background .15s ease,border-color .15s ease;
@@ -294,7 +296,9 @@
     border-radius:8px;
     background:#483627;
     color:#ffe8c4;
-    font:650 11px/1.25 inherit;
+    font-size:11px;
+    font-weight:650;
+    line-height:1.25;
     font-family:inherit;
     cursor:pointer;
 }
