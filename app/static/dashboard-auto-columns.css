@@ -1,26 +1,39 @@
-/* RigObserver adaptive Auto layout for individual sensor widgets.
-   Each row gets readable columns; Free layout keeps exact custom geometry. */
+/* Balanced, responsive Auto sensor-grid.
+   Track count follows actual card width and number of sensors, NOT each
+   widget's saved pixel width. This prevents narrow saved widgets packing
+   four-across inside a card planned for two readable columns.
+   Free positioning is deliberately untouched. */
+
 .overview-section .dashboard > [data-view="widgets"] .pw-mini-region:not(.pw-mini-free) {
-    display:flex;
-    flex-wrap:wrap;
-    align-content:flex-start;
-    align-items:flex-start;
+    display:grid;
+    grid-template-columns:repeat(var(--pw-auto-column-count, 1),minmax(0,1fr));
+    grid-auto-flow:row;
+    grid-auto-rows:max-content;
     gap:12px;
+    align-content:start;
+    align-items:start;
+    justify-content:stretch;
     min-width:0;
 }
+
 .overview-section .dashboard > [data-view="widgets"] .pw-mini-region:not(.pw-mini-free) > .pw-mini-widget {
     box-sizing:border-box;
-    /* JS picks the best number of readable columns for actual card width
-       and sensor count. Inline saved widths are never overwritten. */
-    min-width:min(var(--pw-auto-column-width,275px),100%);
-    flex-grow:1;
-    flex-shrink:0;
+    min-width:min(185px,100%);
     max-width:100%;
+    min-height:155px;
 }
 
-/* A deliberate horizontal resize must override Auto's comfortable-column
-   minimum. Preserve the exact saved width instead of stretching it back. */
+/* Auto sensors stretch to the width of their assigned column by default.
+   The existing inline width is retained for the independent Free layout. */
+.overview-section .dashboard > [data-view="widgets"] .pw-mini-region:not(.pw-mini-free) > .pw-mini-widget:not(.pw-mini-manual-width) {
+    width:100%!important;
+    justify-self:stretch;
+}
+
+/* User-resized widgets keep their exact inline pixel width. If that width
+   needs multiple grid columns, JS sets a temporary grid-column span. */
 .overview-section .dashboard > [data-view="widgets"] .pw-mini-region:not(.pw-mini-free) > .pw-mini-widget.pw-mini-manual-width {
+    justify-self:start;
     min-width:min(185px,100%);
-    flex:0 0 auto;
+    max-width:100%;
 }
