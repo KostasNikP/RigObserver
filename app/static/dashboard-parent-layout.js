@@ -101,8 +101,10 @@ window.addEventListener("pw-apply-recommended-layout",()=>{
     const available=Math.max(MIN_WIDTH,dashboard.clientWidth);
     const half=Math.max(MIN_WIDTH,Math.floor((available-18)/2));
     const wide=available>=1050;
-    const heights={cpu:390,gpu:425,ram:330,storage:340,
-        network:345,motherboard:375};
+    // Balanced starter pairs, tall enough for essential chart and widget
+    // rows. Actual overflow is measured after view switches by the fit event.
+    const heights={cpu:510,gpu:540,ram:350,storage:350,
+        network:480,motherboard:540};
     saved={};
     for(const [group,selector] of selectors) {
         const card=document.querySelector(selector);
@@ -115,6 +117,32 @@ window.addEventListener("pw-apply-recommended-layout",()=>{
     }
     save();
     window.dispatchEvent(new Event("resize"));
+});
+// Make Recommended genuinely ready to use: after applying view modes and
+// sensor selections, fit each card's actual rendered content. This runs
+// ONLY when Recommended is explicitly applied, never on normal manual
+// resizing, ordinary updates, sidebar changes or app startup.
+window.addEventListener("pw-fit-recommended-cards",()=>{
+    let changed=false;
+    for(const [group,selector] of selectors) {
+        const card=document.querySelector(selector);
+        const body=card?.querySelector(".pw-overview-content");
+        if(!card || !body || !body.getClientRects().length) continue;
+        // Tiny overflow values (subpixel rounding) should not affect layout.
+        const overflow=Math.ceil(body.scrollHeight-body.clientHeight);
+        if(overflow<=3)continue;
+        const current=card.getBoundingClientRect().height;
+        if(!Number.isFinite(current) || current<MIN_HEIGHT)continue;
+        const height=Math.min(1400,Math.ceil(current+overflow+12));
+        if(height<=current || height<MIN_HEIGHT)continue;
+        card.style.height=height+"px";
+        saved[group]={...saved[group],height};
+        changed=true;
+    }
+    if(changed){
+        save();
+        window.dispatchEvent(new Event("resize"));
+    }
 });
 window.addEventListener("resize",()=>{
     for(const [group,selector] of selectors){
