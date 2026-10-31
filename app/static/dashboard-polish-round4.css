@@ -1,0 +1,177 @@
+/* RigObserver — Polish Round 4: live readings, sensor widgets and charts.
+   VISUAL ONLY. No width/height/min-size rules, flex/grid positioning,
+   scroll behavior, animations of chart data or layout-state changes. */
+
+/* Small sensor panels: restrained depth, consistent surface hierarchy. */
+.overview-section .dashboard .pw-mini-widget {
+    background:
+        linear-gradient(150deg,rgba(28,45,62,.18) 0%,rgba(8,16,26,0) 66%),
+        #0c1622;
+    border-color:#2e455a;
+    border-radius:11px;
+    box-shadow:
+        inset 0 1px 0 rgba(220,240,255,.04),
+        0 3px 10px rgba(0,0,0,.09);
+    transition:
+        border-color 150ms ease,
+        background-color 150ms ease,
+        box-shadow 150ms ease;
+}
+.overview-section .dashboard .pw-mini-widget:hover {
+    border-color:color-mix(in srgb,var(--mini-accent,#39cfff) 62%,#2e455a);
+    box-shadow:
+        inset 0 1px 0 rgba(240,250,255,.055),
+        0 8px 22px rgba(0,0,0,.21);
+}
+.overview-section .dashboard .pw-mini-widget:focus-within {
+    border-color:color-mix(in srgb,var(--mini-accent,#39cfff) 65%,#2e455a);
+}
+.overview-section .dashboard .pw-mini-widget.is-dragging,
+.overview-section .dashboard .pw-mini-widget.pw-mini-drop-before,
+.overview-section .dashboard .pw-mini-widget.pw-mini-drop-after,
+.overview-section .dashboard .pw-mini-widget:has(.pw-mini-corner.is-resizing) {
+    transition:none;
+}
+
+/* Clear labels and consistent tabular numbers without changing line counts. */
+.overview-section .dashboard .pw-mini-title {
+    gap:3px;
+}
+.overview-section .dashboard .pw-mini-title strong {
+    color:#eef7ff;
+    font-weight:720;
+    letter-spacing:-.15px;
+    line-height:1.35;
+}
+.overview-section .dashboard .pw-mini-title small {
+    color:#8da9be;
+    font-weight:500;
+}
+.overview-section .dashboard .pw-mini-value {
+    color:var(--mini-accent,#39cfff);
+    font-weight:760;
+    letter-spacing:-.45px;
+    font-variant-numeric:tabular-nums;
+    text-shadow:0 0 16px color-mix(in srgb,var(--mini-accent,#39cfff) 15%,transparent);
+}
+.overview-section .dashboard .pw-mini-extrema {
+    color:#a3b7c9;
+    font-variant-numeric:tabular-nums;
+    font-weight:530;
+}
+
+/* Make the drag dots legible, but keep the same draggable hit target. */
+.overview-section .dashboard .pw-mini-grip {
+    color:#779ab2;
+    border-radius:5px;
+}
+.overview-section .dashboard .pw-mini-grip:hover,
+.overview-section .dashboard .pw-mini-grip.is-moving {
+    color:var(--mini-accent,#39cfff);
+}
+
+/* Controls retain exact dimensions used by both Auto and Free layouts. */
+.overview-section .dashboard .pw-mini-mode,
+.overview-section .dashboard .pw-mini-hide {
+    border-color:#334b60;
+    border-radius:7px;
+    background:linear-gradient(145deg,#1b3043,#122334);
+    color:#c9deee;
+    box-shadow:inset 0 1px 0 rgba(255,255,255,.035);
+    transition:background 140ms ease,border-color 140ms ease,color 140ms ease;
+}
+.overview-section .dashboard .pw-mini-mode:hover,
+.overview-section .dashboard .pw-mini-hide:hover {
+    background:#24425a;
+    border-color:var(--mini-accent,#39cfff);
+    color:#ffffff;
+}
+.overview-section .dashboard .pw-mini-widget :is(.pw-mini-grip,.pw-mini-mode,.pw-mini-hide,.pw-mini-corner):focus-visible {
+    outline:2px solid var(--mini-accent,#39cfff);
+    outline-offset:2px;
+}
+.overview-section .dashboard .pw-mini-corner {
+    color:#88a9bf;
+    border-radius:6px;
+    background:linear-gradient(135deg,transparent,rgba(39,73,98,.24));
+}
+.overview-section .dashboard .pw-mini-corner:hover,
+.overview-section .dashboard .pw-mini-corner.is-resizing {
+    color:var(--mini-accent,#39cfff);
+    background:linear-gradient(135deg,transparent,rgba(56,103,127,.34));
+}
+
+/* History traces: subtle guide lines and a quiet bottom fade,
+   with SVG viewBox, dimensions and drawing logic unchanged. */
+.overview-section .dashboard .pw-mini-graph {
+    overflow:hidden;
+    border-radius:5px;
+    background-image:
+        linear-gradient(180deg,transparent 0%,rgba(35,63,82,.055) 100%),
+        repeating-linear-gradient(0deg,transparent 0px,transparent 28px,
+            rgba(114,162,194,.045) 29px);
+}
+.overview-section .dashboard .pw-mini-graph svg {
+    shape-rendering:geometricPrecision;
+}
+.overview-section .dashboard .pw-mini-line {
+    stroke-linecap:round;
+    stroke-linejoin:round;
+}
+.overview-section .dashboard .pw-mini-area {
+    opacity:.13;
+}
+.overview-section .dashboard .pw-mini-big-value {
+    letter-spacing:-.55px;
+    font-variant-numeric:tabular-nums;
+}
+.overview-section .dashboard .pw-mini-gauge-value {
+    font-weight:750;
+    font-variant-numeric:tabular-nums;
+}
+
+/* Standalone CPU/GPU graphs and other single-metric graph surfaces. */
+.overview-section .dashboard :is(.pw3-cpu-chart-container,.pw3-gpu-chart-container) {
+    border-color:#304356;
+    border-radius:12px;
+    background:linear-gradient(170deg,rgba(44,76,102,.10),rgba(8,16,26,.10) 75%);
+    box-shadow:inset 0 1px 0 rgba(215,241,255,.035);
+}
+.overview-section .dashboard .pw-extra-primary:not([hidden]) {
+    border-color:#304b60;
+    background:linear-gradient(150deg,rgba(27,47,68,.43),rgba(8,17,27,.7));
+    box-shadow:inset 0 1px 0 rgba(230,246,255,.04);
+}
+.overview-section .dashboard .pw-extra-primary-reading {
+    border-color:#314d62;
+    background:rgba(22,42,61,.8);
+}
+.overview-section .dashboard .pw-extra-primary-reading strong {
+    font-variant-numeric:tabular-nums;
+}
+
+/* Decorative header accent on existing stat tiles. */
+.overview-section .dashboard :is(.pw3-cpu-stat,.pw3-gpu-detail) {
+    border-color:#2d4256;
+    border-radius:11px;
+    background:linear-gradient(145deg,rgba(20,35,50,.75),rgba(9,18,29,.72));
+    box-shadow:inset 0 1px 0 rgba(232,245,255,.035);
+}
+.overview-section .dashboard :is(.pw3-cpu-stat,.pw3-gpu-detail) strong {
+    font-variant-numeric:tabular-nums;
+}
+
+/* Consistent subtle focus and feedback without moving layout elements. */
+@media(hover:hover) {
+    .overview-section .dashboard .pw-mini-widget .pw-mini-mode,
+    .overview-section .dashboard .pw-mini-widget .pw-mini-hide {
+        cursor:pointer;
+    }
+}
+@media(prefers-reduced-motion:reduce) {
+    .overview-section .dashboard .pw-mini-widget,
+    .overview-section .dashboard .pw-mini-mode,
+    .overview-section .dashboard .pw-mini-hide {
+        transition:none;
+    }
+}
