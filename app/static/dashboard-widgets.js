@@ -31,7 +31,8 @@ let state = {
     selected:Object.fromEntries(GROUPS.map(g => [g,null])),
     layout:{},
     free:Object.fromEntries(GROUPS.map(g => [g,false])),
-    freePriority:Object.fromEntries(GROUPS.map(g => [g,null]))
+    freePriority:Object.fromEntries(GROUPS.map(g => [g,null])),
+    recommendedPending:Object.fromEntries(GROUPS.map(g => [g,false]))
 };
 let draft = null, category = "cpu", inventorySig = "";
 let lastSnapshot = null;
@@ -58,6 +59,7 @@ try {
             state.free[g] = stored.free?.[g] === true;
             if (typeof stored.freePriority?.[g] === "string")
                 state.freePriority[g] = stored.freePriority[g];
+            state.recommendedPending[g] = stored.recommendedPending?.[g] === true;
         }
     }
 } catch(e) {console.warn("Could not restore widgets:",e);}
@@ -119,6 +121,52 @@ function defaults(group,items) {
         // Offer live hardware temperature by default only if available.
         if(group==="ram"||group==="storage")
             add("Temperature",/Temperature|Composite|Memory/i);
+    }
+    return chosen;
+}
+// The beginner-friendly Recommended preset only selects essential readings
+// actually discovered on this computer; unavailable optional sensors are skipped.
+function recommended(group,items) {
+    const chosen=[];
+    function pick(type,pattern) {
+        const item=items.find(x=>x.type===type&&!chosen.includes(x.id)&&
+            (!pattern||pattern.test(x.name)));
+        if(item)chosen.push(item.id);
+    }
+    function metric(key) {
+        const item=items.find(x=>x.id===group+":metrics/"+key);
+        if(item&&!chosen.includes(item.id)) chosen.push(item.id);
+    }
+    if(group==="cpu") {
+        pick("Load",/CPU Total|Total CPU|CPU Core|Package/i);
+        pick("Temperature",/Tctl\/Tdie|CPU Core|Package|CPU Temperature/i);
+        pick("Clock",/Cores \(Average\)|Average|Core #?1|CPU Core/i);
+    } else if(group==="gpu") {
+        pick("Load",/GPU Core|GPU Load/i);
+        pick("Temperature",/GPU Core|GPU Temperature/i);
+        pick("Clock",/GPU Core/i);
+        pick("SmallData",/Dedicated Memory Used|GPU Memory Used/i);
+    } else if(group==="ram") {
+        metric("used_pct");metric("used_gib");metric("available_gib");
+    } else if(group==="storage") {
+        metric("used_pct");metric("used_gib");metric("free_gib");
+    } else if(group==="network") {
+        metric("download_mbps");metric("upload_mbps");
+    } else if(group==="motherboard") {
+        pick("Temperature",/CPU|Tctl\/Tdie/i);
+        pick("Temperature",/System|Motherboard|Chipset/i);
+        pick("Fan",/CPU|System|Fan/i);
+        pick("Voltage",/\+?12V/i);
+    }
+    const preferred=defaults(group,items);
+    // Fall back to the existing hardware-aware default ordering if needed.
+    if(!chosen.length)return preferred.slice(0,4);
+    if(group==="cpu" || group==="gpu") {
+        for(const id of preferred) {
+            if(chosen.length>=3 && group==="cpu")break;
+            if(chosen.length>=4 && group==="gpu")break;
+            if(!chosen.includes(id))chosen.push(id);
+        }
     }
     return chosen;
 }
@@ -777,7 +825,10 @@ function applyCatalog(timestamp) {
         const ready = group==="cpu"||group==="gpu"||group==="motherboard" ||
             metricsCatalog[group].size>0;
         if(state.selected[group]===null && ready && merged.size) {
-            state.selected[group]=defaults(group,[...merged.values()]);
+            state.selected[group]=state.recommendedPending[group]
+                ? recommended(group,[...merged.values()])
+                : defaults(group,[...merged.values()]);
+            state.recommendedPending[group]=false;
             modified=true;
         }
         render(group);
@@ -1096,5 +1147,27 @@ document.getElementById("pwCustomizeApply").addEventListener("click",()=>{
     if(selectedGroup==="cpu")setCpuView("widgets");
     if(selectedGroup==="gpu")setGpuView("widgets");
 });
-window.PulseWatchWidgets={update,updateMetrics};
+// Safe in-place preset: recreate mini cards to clear former manual sizes,
+// restore Auto mode and persist selections, without destroying live metrics.
+function applyRecommendedSensors() {
+    for(const group of GROUPS) {
+        const items=[...catalog[group].values()];
+        for(const id of Object.keys(state.layout)) {
+            if(id.startsWith(group+":")) delete state.layout[id];
+        }
+        state.selected[group]=items.length?recommended(group,items):null;
+        state.recommendedPending[group]=!items.length;
+        state.free[group]=false;
+        state.freePriority[group]=null;
+        freePins.delete(group);
+        for(const [id,card] of cards) {
+            if(card.item.group!==group)continue;
+            card.node.remove();
+            cards.delete(id);
+        }
+        render(group);
+    }
+    save();
+}
+window.PulseWatchWidgets={update,updateMetrics,applyRecommendedSensors};
 })();
