@@ -46,8 +46,9 @@ Track CPU, memory, and network activity with real-time and historical performanc
 - Use a balanced Auto sensor grid based on actual card width and sensor count, rather than squeezing extra columns in from saved narrow widget widths. Manual widget widths remain adjustable and can span grid columns; Free positioning is unchanged.
 - Prevent mini-widget overlaps in Free sensor layout while dragging, resizing, changing the parent width or returning to Widgets mode. Preserve saved positions of neighboring sensors and prioritize the most recently moved/resized widget.
 - Update Chart.js canvas sizes when a card is resized directly.
-- Reorder the six main dashboard cards by dragging their handles, or use Move earlier / Move later; card order is saved locally.
+- Reorder the six main dashboard cards by dragging their handles (or Alt + arrow keys); card order is saved locally.
 - Choose **Smart Layout** to automatically pack cards into available space, or **Free Layout** to drag cards to any position with optional gaps.
+- Apply the **Recommended** preset (with confirmation) for essential hardware-aware CPU/GPU/RAM/Storage/Network/Motherboard readings, balanced card sizes and starter views. You can customize everything afterward.
 - Keep Free positions and Smart card order independently between launches; reset Free positions without deleting sensor settings.
 - Free Layout automatically avoids card overlaps when opening/collapsing the sidebar, resizing the window, or dragging a card over another; stored positions are preserved when only the workspace width changes.
 - Add or hide sensor mini-widgets; change their order, size, and display format.
