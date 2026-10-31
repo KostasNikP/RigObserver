@@ -53,6 +53,31 @@
     font-size:12px;
     line-height:1.5;
 }
+/* A quiet editorial accent and two reading levels make the subtitle
+   feel attached to the page title, not like a disconnected caption. */
+.topbar .topbar-heading .pw-dashboard-subtitle {
+    box-sizing:border-box;
+    display:flex;
+    flex-wrap:wrap;
+    align-items:baseline;
+    column-gap:9px;
+    row-gap:1px;
+    max-width:750px;
+    margin:8px 0 0;
+    padding:1px 0 1px 12px;
+    border-left:2px solid #49bde9;
+    font-size:13px;
+    line-height:1.5;
+    letter-spacing:0;
+}
+.topbar .pw-dashboard-subtitle-lead {
+    color:#e1f2ff;
+    font-weight:660;
+}
+.topbar .pw-dashboard-subtitle-detail {
+    color:#9db8ce;
+    font-weight:460;
+}
 .topbar .topbar-right {
     flex:0 0 auto;
     display:flex;
