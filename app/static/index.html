@@ -26,6 +26,7 @@
     <link rel="stylesheet" href="/static/dashboard-polish-round4.css?v=0.3.0-polish4">
     <link rel="stylesheet" href="/static/dashboard-header-refine.css?v=0.3.0-header2">
     <link rel="stylesheet" href="/static/dashboard-system-polish.css?v=0.3.0-system1">
+    <link rel="stylesheet" href="/static/dashboard-alerts-top.css?v=0.3.0-topalerts1">
 </head>
 
 <body>
@@ -122,6 +123,33 @@
                 <div class="topbar-right">
                     <button id="pwCustomizeDashboard" type="button"
                             class="pw-customize-launch">Customize Dashboard</button>
+                    <div id="pwTopAlerts" class="pw-top-alerts" data-state="loading">
+                        <button id="pwTopAlertsToggle" type="button" class="pw-top-alerts-toggle"
+                                aria-haspopup="true" aria-controls="pwTopAlertsPanel"
+                                aria-expanded="false" aria-label="System alerts, checking status">
+                            <svg viewBox="0 0 24 24" aria-hidden="true">
+                                <path d="M18 8a6 6 0 0 0-12 0c0 7-3 7-3 9h18c0-2-3-2-3-9"/>
+                                <path d="M10 21h4"/>
+                            </svg>
+                            <span>Alerts</span>
+                            <span id="pwTopAlertsCount" class="pw-top-alerts-count">—</span>
+                        </button>
+                        <div id="pwTopAlertsPanel" class="pw-top-alerts-panel" hidden>
+                            <div class="pw-top-alerts-panel-header">
+                                <div>
+                                    <strong>System Alerts</strong>
+                                    <span id="pwTopAlertsSummary">Checking current status</span>
+                                </div>
+                                <button id="pwTopAlertsClose" type="button"
+                                        aria-label="Close alerts panel">×</button>
+                            </div>
+                            <div id="pwTopAlertsList" class="pw-top-alerts-list" role="list"></div>
+                            <div class="pw-top-alerts-panel-footer">
+                                <a href="#alerts">View all alerts</a>
+                                <a href="#alert-settings">Alert Settings</a>
+                            </div>
+                        </div>
+                    </div>
                     <span id="connectionStatus" class="environment-badge connection-status" data-state="connecting" role="status"
                         aria-live="polite">
                         Connecting...
@@ -879,11 +907,23 @@
 <!-- Connection notification -->
 <div id="connectionToast" class="connection-toast" role="status" aria-live="polite" aria-atomic="true"></div>
 
+<!-- In-app alert notice: only shown for newly active thresholds. -->
+<div id="pwAlertToast" class="pw-alert-toast" role="alert" hidden>
+    <span class="pw-alert-toast-icon" aria-hidden="true">!</span>
+    <div class="pw-alert-toast-copy">
+        <strong id="pwAlertToastTitle">System alert</strong>
+        <span id="pwAlertToastMessage"></span>
+    </div>
+    <button type="button" id="pwAlertToastView">View</button>
+    <button type="button" id="pwAlertToastClose" aria-label="Dismiss alert notification">×</button>
+</div>
+
 <!-- Chart.js -->
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
 <!-- Dashboard logic -->
-<script src="/static/script.js?v=0.3.0-alertpolish1"></script>
+<script src="/static/script.js?v=0.3.0-alertpolish2"></script>
+<script src="/static/dashboard-alerts-top.js?v=0.3.0-topalerts1"></script>
 
 <!-- Notifications -->
 <script src="/static/notifications.js?v=0.3.0-gpu-fix1"></script>
