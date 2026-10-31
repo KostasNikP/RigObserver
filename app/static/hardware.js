@@ -884,9 +884,14 @@ function setHardwareStatus(state, label) {
 }
 
 async function updateHardwareMonitor() {
+    // Sensor bridge calls may occasionally stall. Allow a retry instead
+    // of permanently suspending the refresh loop behind an unresolved fetch.
+    const controller=new AbortController();
+    const requestTimeout=setTimeout(()=>controller.abort(),20000);
     try {
         const response = await fetch("/api/sensors", {
-            cache: "no-store"
+            cache: "no-store",
+            signal: controller.signal
         });
 
         if (!response.ok) {
@@ -1141,6 +1146,8 @@ async function updateHardwareMonitor() {
 
         hardwareSensorNodes.clear();
         hardwareSummaryNodes.clear();
+    } finally {
+        clearTimeout(requestTimeout);
     }
 }
 
