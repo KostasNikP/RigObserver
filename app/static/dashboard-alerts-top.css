@@ -1,0 +1,315 @@
+/* RigObserver: always-visible System Alerts status next to Connected.
+   Active warnings remain accessible from the top of the dashboard; the
+   existing detailed section and thresholds API are unchanged. */
+
+.topbar {z-index:40;}
+.topbar .pw-top-alerts {
+    position:relative;
+    z-index:45;
+    flex:0 0 auto;
+}
+.topbar .pw-top-alerts-toggle {
+    box-sizing:border-box;
+    display:inline-flex;
+    align-items:center;
+    justify-content:center;
+    gap:8px;
+    min-height:39px;
+    padding:8px 11px;
+    border:1px solid #375367;
+    border-radius:10px;
+    background:linear-gradient(145deg,#1b3043,#132436);
+    color:#dceefd;
+    font:650 12px/1.3 inherit;
+    font-family:inherit;
+    cursor:pointer;
+    transition:background .15s ease,border-color .15s ease;
+}
+.topbar .pw-top-alerts-toggle svg {
+    box-sizing:border-box;
+    width:16px;
+    height:16px;
+    fill:none;
+    stroke:currentColor;
+    stroke-width:1.8;
+    stroke-linecap:round;
+    stroke-linejoin:round;
+}
+.topbar .pw-top-alerts-count {
+    display:grid;
+    place-items:center;
+    min-width:21px;
+    height:21px;
+    padding:0 5px;
+    border-radius:6px;
+    background:#294157;
+    color:#b8d4e7;
+    font-size:11px;
+    font-weight:760;
+    font-variant-numeric:tabular-nums;
+}
+.topbar #pwTopAlerts[data-state="healthy"] .pw-top-alerts-toggle {
+    border-color:#2d5b53;
+    color:#a9e8d4;
+}
+.topbar #pwTopAlerts[data-state="healthy"] .pw-top-alerts-count {
+    background:#183b33;
+    color:#7be0bb;
+}
+.topbar #pwTopAlerts[data-state="warning"] .pw-top-alerts-toggle {
+    border-color:#957044;
+    background:linear-gradient(145deg,#382d21,#27231f);
+    color:#ffd69d;
+}
+.topbar #pwTopAlerts[data-state="warning"] .pw-top-alerts-count {
+    background:#664721;
+    color:#ffe0b3;
+}
+.topbar #pwTopAlerts[data-state="critical"] .pw-top-alerts-toggle {
+    border-color:#ab515e;
+    background:linear-gradient(145deg,#45262e,#2c2027);
+    color:#ffc1cb;
+}
+.topbar #pwTopAlerts[data-state="critical"] .pw-top-alerts-count {
+    background:#73343c;
+    color:#ffe0e5;
+}
+.topbar .pw-top-alerts-toggle:hover,
+.topbar .pw-top-alerts-toggle[aria-expanded="true"] {
+    border-color:#77c8e8;
+    background:#26435a;
+}
+.topbar .pw-top-alerts-toggle:focus-visible,
+.pw-top-alerts-panel button:focus-visible,
+.pw-top-alerts-panel a:focus-visible,
+.pw-alert-toast button:focus-visible {
+    outline:2px solid #8ce4ff;
+    outline-offset:3px;
+}
+
+/* Popover stays attached to the alert button and never affects layout. */
+.pw-top-alerts-panel {
+    box-sizing:border-box;
+    position:absolute;
+    z-index:200;
+    top:calc(100% + 10px);
+    right:0;
+    width:370px;
+    max-width:calc(100vw - 28px);
+    overflow:hidden;
+    border:1px solid #3c596f;
+    border-radius:14px;
+    background:linear-gradient(150deg,#162a3b,#0c1928);
+    color:#e7f3fc;
+    box-shadow:0 18px 52px rgba(0,0,0,.52),
+        inset 0 1px 0 rgba(255,255,255,.045);
+}
+.pw-top-alerts-panel[hidden],
+.pw-alert-toast[hidden] {display:none!important;}
+.pw-top-alerts-panel-header {
+    display:flex;
+    align-items:flex-start;
+    justify-content:space-between;
+    gap:12px;
+    padding:16px;
+    border-bottom:1px solid #2d4458;
+}
+.pw-top-alerts-panel-header > div {
+    display:flex;
+    flex-direction:column;
+    min-width:0;
+    gap:5px;
+}
+.pw-top-alerts-panel-header strong {
+    color:#f0f9ff;
+    font-size:15px;
+    font-weight:750;
+}
+.pw-top-alerts-panel-header span {
+    color:#93b5c8;
+    font-size:11px;
+    line-height:1.35;
+}
+.pw-top-alerts-panel-header button {
+    flex:0 0 29px;
+    min-height:29px;
+    border:1px solid #36576c;
+    border-radius:8px;
+    background:#1a3245;
+    color:#c7dfef;
+    font-size:18px;
+    cursor:pointer;
+}
+.pw-top-alerts-list {
+    display:flex;
+    flex-direction:column;
+    gap:8px;
+    max-height:min(340px,48vh);
+    overflow-y:auto;
+    padding:12px 14px;
+    scrollbar-color:#395a72 transparent;
+    overscroll-behavior-y:auto;
+}
+.pw-top-alert-row {
+    display:flex;
+    flex-direction:column;
+    gap:6px;
+    padding:12px;
+    border:1px solid #7c6039;
+    border-left:3px solid #f4b964;
+    border-radius:9px;
+    background:#2a251e;
+}
+.pw-top-alert-row.critical {
+    border-color:#944a56;
+    border-left-color:#ff808d;
+    background:#301f29;
+}
+.pw-top-alert-row strong {
+    font-size:12px;
+    line-height:1.45;
+    font-weight:700;
+    color:#ffe0ad;
+    overflow-wrap:anywhere;
+}
+.pw-top-alert-row.critical strong {color:#ffd0d6;}
+.pw-top-alert-row span {
+    font-size:11px;
+    color:#d0b99c;
+    font-variant-numeric:tabular-nums;
+}
+.pw-top-alert-row.critical span {color:#dcadb5;}
+.pw-top-alerts-ok {
+    display:flex;
+    align-items:center;
+    gap:10px;
+    padding:12px 9px;
+}
+.pw-top-alerts-ok > span {
+    display:grid;
+    place-items:center;
+    flex:0 0 31px;
+    height:31px;
+    border:1px solid #397b66;
+    border-radius:9px;
+    background:#183b32;
+    color:#79e8b7;
+    font-size:17px;
+    font-weight:750;
+}
+.pw-top-alerts-ok > div {
+    display:flex;
+    flex-direction:column;
+    gap:4px;
+    min-width:0;
+}
+.pw-top-alerts-ok strong {font-size:12px;color:#e4f8f0;}
+.pw-top-alerts-ok div span {font-size:11px;color:#9abbb4;}
+.pw-top-alerts-panel-footer {
+    display:flex;
+    justify-content:space-between;
+    gap:12px;
+    padding:12px 15px;
+    border-top:1px solid #2d4557;
+    background:#101e2b;
+}
+.pw-top-alerts-panel-footer a {
+    font-size:11px;
+    font-weight:650;
+    text-decoration:none;
+    color:#8dd7f7;
+}
+.pw-top-alerts-panel-footer a:hover {
+    color:#ddf7ff;
+    text-decoration:underline;
+}
+
+/* One-time notice for newly triggered alerts even when user has scrolled
+   away from the header. It does not cover the entire page or block scrolling. */
+.pw-alert-toast {
+    box-sizing:border-box;
+    position:fixed;
+    z-index:500;
+    top:65px;
+    right:24px;
+    display:flex;
+    align-items:center;
+    gap:11px;
+    width:min(465px,calc(100vw - 32px));
+    min-height:72px;
+    padding:12px;
+    border:1px solid #a17a42;
+    border-left:3px solid #f5b95e;
+    border-radius:12px;
+    background:linear-gradient(125deg,#30291f,#1b2530);
+    box-shadow:0 17px 48px rgba(0,0,0,.46);
+    color:#f4e7d4;
+}
+.pw-alert-toast[data-state="critical"] {
+    background:linear-gradient(125deg,#37222c,#1c222d);
+    border-color:#af5662;
+    border-left-color:#ff8290;
+}
+.pw-alert-toast-icon {
+    display:grid;
+    place-items:center;
+    flex:0 0 31px;
+    height:31px;
+    border:1px solid #9e763b;
+    border-radius:9px;
+    background:#614121;
+    color:#ffe3af;
+    font-size:19px;
+    font-weight:750;
+}
+.pw-alert-toast[data-state="critical"] .pw-alert-toast-icon {
+    border-color:#ab5963;
+    background:#602f3b;
+    color:#ffd8df;
+}
+.pw-alert-toast-copy {
+    display:flex;
+    flex:1 1 auto;
+    flex-direction:column;
+    gap:4px;
+    min-width:0;
+}
+.pw-alert-toast-copy strong {
+    color:#fff1d9;
+    font-size:13px;
+    line-height:1.3;
+    font-weight:750;
+}
+.pw-alert-toast-copy span {
+    color:#ebcfa9;
+    font-size:11px;
+    line-height:1.45;
+    overflow-wrap:anywhere;
+}
+.pw-alert-toast button {
+    flex:0 0 auto;
+    min-height:31px;
+    padding:6px 9px;
+    border:1px solid #9b7a51;
+    border-radius:8px;
+    background:#483627;
+    color:#ffe8c4;
+    font:650 11px/1.25 inherit;
+    font-family:inherit;
+    cursor:pointer;
+}
+.pw-alert-toast button:hover {border-color:#f4cc90;}
+.pw-alert-toast #pwAlertToastClose {
+    min-width:30px;
+    padding:4px 8px;
+    font-size:19px;
+    line-height:1;
+}
+@media(max-width:720px) {
+    .topbar .pw-top-alerts-toggle {padding:8px 10px;}
+    .topbar .topbar-right {justify-content:flex-start;}
+    .pw-alert-toast {right:10px;top:12px;width:calc(100vw - 20px);}
+}
+@media(prefers-reduced-motion:reduce) {
+    .topbar .pw-top-alerts-toggle {transition:none;}
+}
