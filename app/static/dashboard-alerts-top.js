@@ -20,6 +20,8 @@ if(![root,toggle,badge,panel,summary,list,close,toast,toastTitle,
 
 let priorKeys=new Set();
 let toastTimeout=null;
+let latestAlerts=null;
+let lastListSignature=null;
 
 const alertKey=(alert)=>[
     String(alert.id??alert.metric??alert.message??"unknown"),
@@ -37,6 +39,7 @@ function dismissToast() {
 function openPanel() {
     panel.hidden=false;
     toggle.setAttribute("aria-expanded","true");
+    if(latestAlerts!==null)renderList(latestAlerts);
 }
 function closePanel() {
     panel.hidden=true;
@@ -59,6 +62,13 @@ function makeAlertRow(alert) {
     return row;
 }
 function renderList(alerts) {
+    // Most 3-second polls have the same alert content. Avoid destroying
+    // the entire list (and its keyboard focus) unless visible data changes.
+    const signature=JSON.stringify(alerts.map(alert=>[
+        alertKey(alert),alert.message,alert.value
+    ]));
+    if(signature===lastListSignature)return;
+    lastListSignature=signature;
     // Keep the user's position when alerts refresh while the popover is open.
     const previousScroll=list.scrollTop;
     list.replaceChildren();
@@ -99,6 +109,7 @@ function notifyNewAlert(items) {
 }
 function update(alerts) {
     if(!Array.isArray(alerts))return;
+    latestAlerts=alerts;
     const count=alerts.length;
     const critical=alerts.some(isCritical);
     root.dataset.state=count?(critical?"critical":"warning"):"healthy";
@@ -109,7 +120,8 @@ function update(alerts) {
     toggle.setAttribute("aria-label",count
         ?count+" active system "+(count===1?"alert":"alerts")+", open details"
         :"System alerts, no active warnings");
-    renderList(alerts);
+    // Nothing in the hidden popover needs DOM work while it is closed.
+    if(!panel.hidden)renderList(alerts);
 
     const newKeys=new Set(alerts.map(alertKey));
     const additions=alerts.filter(alert=>!priorKeys.has(alertKey(alert)));
