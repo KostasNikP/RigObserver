@@ -27,6 +27,7 @@
     <link rel="stylesheet" href="/static/dashboard-header-refine.css?v=0.3.0-header2">
     <link rel="stylesheet" href="/static/dashboard-system-polish.css?v=0.3.0-system1">
     <link rel="stylesheet" href="/static/dashboard-alerts-top.css?v=0.3.0-topalerts1">
+    <link rel="stylesheet" href="/static/dashboard-windows-notifications.css?v=0.3.0-win1">
 </head>
 
 <body>
@@ -809,7 +810,31 @@
                             </div>
                 
                         </form>
-                
+
+                        <div class="pw-windows-notifications-settings">
+                            <div class="pw-windows-notifications-header">
+                                <div class="pw-windows-notifications-heading">
+                                    <span class="pw-windows-notifications-symbol" aria-hidden="true">
+                                        <svg viewBox="0 0 24 24"><path d="M18 8a6 6 0 0 0-12 0c0 7-3 7-3 9h18c0-2-3-2-3-9"/><path d="M10 21h4"/></svg>
+                                    </span>
+                                    <div>
+                                        <h3>Windows Notifications</h3>
+                                        <p>Show new threshold warnings in Windows, outside RigObserver.</p>
+                                    </div>
+                                </div>
+                                <label class="pw-windows-notifications-switch">
+                                    <input id="pwWindowsNotificationsEnabled" type="checkbox" checked>
+                                    <span>Show notifications</span>
+                                </label>
+                            </div>
+                            <div class="pw-windows-notifications-footer">
+                                <button id="pwWindowsNotificationsTest" type="button" disabled>Test notification</button>
+                                <span id="pwWindowsNotificationsStatus" role="status" aria-live="polite">
+                                    Checking desktop support...
+                                </span>
+                            </div>
+                        </div>
+
                     </div>
                 
                 </section>
@@ -923,7 +948,8 @@
 
 <!-- Dashboard logic -->
 <script src="/static/script.js?v=0.3.0-stability1"></script>
-<script src="/static/dashboard-alerts-top.js?v=0.3.0-stability1"></script>
+<script src="/static/dashboard-alerts-top.js?v=0.3.0-win1"></script>
+<script src="/static/dashboard-windows-notifications.js?v=0.3.0-win1"></script>
 
 <!-- Notifications -->
 <script src="/static/notifications.js?v=0.3.0-gpu-fix1"></script>
