@@ -30,22 +30,21 @@ if errorlevel 1 (
     goto :failed
 )
 
-if exist "%ProgramFiles(x86)%\Inno Setup 6\ISCC.exe" (
-    set "ISCC=%ProgramFiles(x86)%\Inno Setup 6\ISCC.exe"
-)
-if not defined ISCC if exist "%ProgramFiles%\Inno Setup 6\ISCC.exe" (
-    set "ISCC=%ProgramFiles%\Inno Setup 6\ISCC.exe"
-)
-if not defined ISCC (
-    for /f "delims=" %%F in ('where ISCC.exe 2^>nul') do (
-        if not defined ISCC set "ISCC=%%F"
-    )
-)
-if not defined ISCC (
-    echo ERROR: Inno Setup 6 was not found.
-    echo Install Inno Setup 6 or add ISCC.exe to PATH.
+REM Inno Setup can be installed per-user by winget, so Program Files
+REM checks alone are not enough. Also accept registered custom locations.
+if not exist "scripts\find_inno_setup.ps1" (
+    echo ERROR: Inno Setup locator script is missing.
     goto :failed
 )
+for /f "usebackq delims=" %%F in (`powershell.exe -NoProfile -ExecutionPolicy Bypass -File "scripts\find_inno_setup.ps1"`) do (
+    if not defined ISCC set "ISCC=%%F"
+)
+if not defined ISCC (
+    echo ERROR: Inno Setup compiler ISCC.exe could not be located.
+    echo Check where Inno Setup is installed. You do not need to reinstall it.
+    goto :failed
+)
+echo Inno Setup compiler: "%ISCC%"
 
 echo [1/4] Install Python runtime and build requirements...
 "%PYTHON%" -m pip install -r requirements.txt
