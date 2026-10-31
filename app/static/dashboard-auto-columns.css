@@ -20,7 +20,6 @@
     box-sizing:border-box;
     min-width:min(185px,100%);
     max-width:100%;
-    min-height:155px;
 }
 
 /* Auto sensors stretch to the width of their assigned column by default.
