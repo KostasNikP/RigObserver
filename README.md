@@ -72,6 +72,9 @@ Hardware availability varies by machine, drivers, permissions, and sensors expos
 - Historical usage records stored in a local SQLite database.
 - Configurable CPU, RAM, and disk usage thresholds.
 - Alerts after three consecutive readings at or above a threshold.
+- In-app warning counter and status popover in the dashboard header.
+- Optional native Windows toast notifications for newly triggered warnings (not on every refresh).
+- Enable/disable Windows notifications and send a test from **Alert Settings**.
 - Local FastAPI endpoints and interactive documentation at `/docs`.
 
 ## Windows Desktop Application
@@ -84,6 +87,8 @@ The Windows build uses **pywebview / Microsoft Edge WebView2** and includes a Py
 - Administrator permission is optional for additional hardware sensor access.
 
 The packaged version does **not** require installing Python or the .NET SDK separately.
+
+**Windows notifications:** The native toast integration is part of the current development source and must be included in the next installer release; the downloadable v0.1.0 installer predates it. Notifications use the Windows notification service and are subject to Windows notification permissions / Do Not Disturb. If a toast is not visible, check **Settings → System → Notifications** and use **Alert Settings → Test notification** to diagnose. In-app alerts still work if native notifications are unavailable.
 
 ### Download and installation
 
@@ -102,6 +107,7 @@ The Windows application currently keeps using the legacy **`%LOCALAPPDATA%\Pulse
 ### Prerequisites
 
 - Windows and Python 3 with `venv` and `pip` (developed with Python 3.14).
+- `winotify` is installed by `pip install -r requirements.txt` and is used only for native Windows toasts.
 - .NET 10 SDK for building the sensor bridge.
 - Internet access to install dependencies and access the Chart.js CDN used by the dashboard.
 
