@@ -607,6 +607,9 @@ function renderAlerts(alerts) {
     container.replaceChildren();
     count.textContent = alerts.length === 1 ? "1 active alert" : `${alerts.length} active alerts`;
     count.dataset.state = alerts.length ? "warning" : "healthy";
+    // Keep the immediately visible top-bar indicator and new-alert
+    // notification synchronized with the existing System Alerts section.
+    window.RigObserverTopAlerts?.update(alerts);
 
     if (alerts.length === 0) {
         const message = document.createElement("div");
