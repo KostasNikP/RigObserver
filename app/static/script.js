@@ -657,9 +657,14 @@ function renderAlerts(alerts) {
 // ==========================================
 
 async function updateDashboard() {
+    // Prevent a stalled request from stopping the refresh loop forever.
+    // The next 3-second refresh retries as soon as the request times out.
+    const controller=new AbortController();
+    const requestTimeout=setTimeout(()=>controller.abort(),10000);
     try {
         const response = await fetch("/api/metrics", {
-            cache: "no-store"
+            cache: "no-store",
+            signal: controller.signal
         });
 
         if (!response.ok) {
@@ -759,8 +764,10 @@ async function updateDashboard() {
         }
 
     } catch (error) {
-        console.error("PulseWatch update failed:", error);
+        console.error("RigObserver metrics refresh failed:", error);
         setConnectionState("offline");
+    } finally {
+        clearTimeout(requestTimeout);
     }
 }
 
